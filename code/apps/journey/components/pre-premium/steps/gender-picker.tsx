@@ -10,13 +10,13 @@ export default function GenderPicker() {
   const [step, setStep] = useQueryState("step", parseAsInteger.withDefault(0));
   const customerId = useStore((state) => state.customerId);
 
-  const handleClick = async () => {
+  const handleClick = async (gender: Gender) => {
     console.log(customerId);
     if (!customerId) {
       return;
     }
     console.log("step", step);
-    await updateGender(customerId, Gender.male);
+    await updateGender(customerId, gender);
     setStep(step + 1);
   };
 
@@ -24,8 +24,8 @@ export default function GenderPicker() {
     <div>
       <p>Which gender are you?</p>
       <div className="flex gap-4">
-        <Button onClick={handleClick}>Male</Button>
-        <Button onClick={handleClick}>Female</Button>
+        <Button onClick={() => handleClick(Gender.male)}>Male</Button>
+        <Button onClick={() => handleClick(Gender.female)}>Female</Button>
       </div>
     </div>
   );
