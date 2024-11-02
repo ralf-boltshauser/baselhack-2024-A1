@@ -11,15 +11,23 @@ import { parseAsInteger, useQueryState } from "nuqs";
 import { useEffect, useRef, useState } from "react";
 import useStore from "~/store";
 import { createCustomer } from "./actions";
-import GenderPicker from "./steps/gender-picker";
-import Intro from "./steps/testing-comp";
 
-export default function Main() {
+export default function Main({
+  elements,
+}: {
+  elements: Array<{ key: string; component: React.ReactNode }>;
+}) {
   const [step, setStep] = useQueryState("step", parseAsInteger.withDefault(0));
 
   const { data, refetch } = useQuery({
     queryKey: ["customer"],
-    queryFn: () => createCustomer(),
+    // queryFn: () => createCustomer(),
+    queryFn: async () => {
+      console.log("queryFn");
+      const res = await createCustomer();
+      console.log("res", res);
+      return res;
+    },
     enabled: false, // This prevents the query from running automatically on mount
   });
 
@@ -42,16 +50,20 @@ export default function Main() {
   const setLoaded = useStore((state) => state.setLoaded);
   useEffect(() => {
     if (!customerId && loaded) {
+      console.log("Triggering customer creation", { customerId, loaded });
       refetch();
+      console.log("refetched");
     }
   }, [customerId, loaded]);
 
   useEffect(() => {
+    console.log("Setting loaded to true");
     setLoaded(true);
   }, []);
 
   useEffect(() => {
     if (data) {
+      console.log("Customer created:", data);
       setCustomerId(Number(data.id));
     }
   }, [data]);
@@ -70,19 +82,8 @@ export default function Main() {
   };
 
   if (!customerId) {
-    return null;
+    return <div>Loading...</div>;
   }
-
-  const elements = [
-    {
-      key: "intro",
-      component: <Intro />,
-    },
-    {
-      key: "genderPicker",
-      component: <GenderPicker />,
-    },
-  ];
 
   return (
     <div className="flex mt-64">
