@@ -8,6 +8,7 @@ import useStore from "~/store";
 import AddressSearch from "~/components/address-search";
 import { PhoneInput } from "~/components/phone-input";
 import { updatePersonalInfo } from "../actions";
+import { TypeWriter } from "~/components/type-writer";
 
 type PersonalInfoProperties = {
   firstName: string;
@@ -20,6 +21,7 @@ type PersonalInfoProperties = {
 interface PersonalInfoProps {
   stepProperties: PersonalInfoProperties;
   onUpdate: (properties: Partial<PersonalInfoProperties>) => void;
+  isSelected?: boolean;
 }
 
 export default function PersonalInfo({
@@ -31,6 +33,7 @@ export default function PersonalInfo({
     address: "",
   },
   onUpdate,
+  isSelected = false,
 }: PersonalInfoProps) {
   const [step, setStep] = useQueryState("step", parseAsInteger.withDefault(0));
   const customerId = useStore((state) => state.customerId);
@@ -64,60 +67,63 @@ export default function PersonalInfo({
 
   return (
     <div className="flex flex-col gap-4">
-      <p>Let's start with some basic information about you</p>
-
-      <div className="flex flex-col gap-6">
-        <div className="space-y-2">
-          <p className="text-sm opacity-75">First Name</p>
-          <Input
-            placeholder="Enter your first name"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-          />
-        </div>
-
-        <div className="space-y-2">
-          <p className="text-sm opacity-75">Last Name</p>
-          <Input
-            placeholder="Enter your last name"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-          />
-        </div>
-
-        <div className="space-y-2">
-          <p className="text-sm opacity-75">Email</p>
-          <Input
-            type="email"
-            placeholder="Enter your email address"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
-
-        <div className="space-y-2">
-          <p className="text-sm opacity-75">Phone Number</p>
-          <PhoneInput
-            value={phone}
-            onChange={setPhone}
-            placeholder="Enter your phone number"
-            defaultCountry="CH"
-          />
-        </div>
-
-        <div className="space-y-2">
-          <p className="text-sm opacity-75">Address</p>
-          <AddressSearch onSelect={setAddress} />
-        </div>
-      </div>
-
-      <Button
-        disabled={!firstName || !lastName || !email || !phone || !address}
-        className="mt-4 ml-auto w-32"
-        onClick={() => handleSubmit()}
+      <TypeWriter
+        text="Let's start with some basic information about you"
+        isSelected={isSelected}
       >
-        Continue
-      </Button>
+        <div className="flex flex-col gap-6">
+          <div className="space-y-2">
+            <p className="text-sm opacity-75">First Name</p>
+            <Input
+              placeholder="Enter your first name"
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+            />
+          </div>
+
+          <div className="space-y-2">
+            <p className="text-sm opacity-75">Last Name</p>
+            <Input
+              placeholder="Enter your last name"
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+            />
+          </div>
+
+          <div className="space-y-2">
+            <p className="text-sm opacity-75">Email</p>
+            <Input
+              type="email"
+              placeholder="Enter your email address"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
+
+          <div className="space-y-2">
+            <p className="text-sm opacity-75">Phone Number</p>
+            <PhoneInput
+              value={phone}
+              onChange={setPhone}
+              placeholder="Enter your phone number"
+              defaultCountry="CH"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <p className="text-sm opacity-75">Address</p>
+            <AddressSearch onSelect={setAddress} />
+          </div>
+        </div>
+
+        <Button
+          disabled={!firstName || !lastName || !email || !phone || !address}
+          className="mt-4 ml-auto w-32"
+          onClick={() => handleSubmit()}
+        >
+          Continue
+        </Button>
+      </TypeWriter>
     </div>
   );
 }

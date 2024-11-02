@@ -4,6 +4,7 @@ import { Button } from "@repo/ui/components/ui/button";
 import { useCallback, useState } from "react";
 import { SignatureField } from "../../signature-field";
 import { ToastPage } from "./toast";
+import { TypeWriter } from "~/components/type-writer";
 
 interface SignatureStepProps {
   onAccept: () => void;
@@ -30,25 +31,25 @@ export const SignatureStep = ({ onAccept }: SignatureStepProps) => {
     <div className="space-y-6">
       <div>
         <h2 className="text-lg font-semibold">Your Signature</h2>
-        <p className="text-sm text-gray-500">
-          Final step! ✍️ Please add your digital signature below to confirm your
-          application.
-        </p>
       </div>
-
-      <SignatureField
-        value={signature ?? undefined}
-        onChange={handleSignatureChange}
-        label="Sign here"
-      />
-
-      <Button
-        disabled={!signature}
-        className="w-fit float-right"
-        onClick={handleAccept}
+      <TypeWriter
+        text="Final step! ✍️ Please add your digital signature below to confirm your application."
+        isSelected={true}
       >
-        Accept and Continue
-      </Button>
+        <SignatureField
+          value={signature ?? undefined}
+          onChange={handleSignatureChange}
+          label="Sign here"
+        />
+
+        <Button
+          disabled={!signature}
+          className="w-fit float-right"
+          onClick={handleAccept}
+        >
+          Accept and Continue
+        </Button>
+      </TypeWriter>
     </div>
   );
 };

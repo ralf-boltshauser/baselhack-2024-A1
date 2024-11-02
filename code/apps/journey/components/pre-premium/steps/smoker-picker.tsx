@@ -7,6 +7,7 @@ import { updateSmokerStatus } from "../actions";
 import Image from "next/image";
 import { useState } from "react";
 import { cn } from "@repo/ui/lib/utils";
+import { TypeWriter } from "~/components/type-writer";
 
 type SmokerProperties = {
   isSmoker: boolean | null;
@@ -14,6 +15,7 @@ type SmokerProperties = {
 
 interface SmokerPickerProps {
   stepProperties?: SmokerProperties;
+  isSelected?: boolean;
   onUpdate?: (properties: Partial<SmokerProperties>) => void;
 }
 
@@ -21,6 +23,7 @@ export default function SmokerPicker({
   stepProperties = {
     isSmoker: null,
   },
+  isSelected = false,
   onUpdate,
 }: SmokerPickerProps) {
   const [step, setStep] = useQueryState("step", parseAsInteger.withDefault(0));
@@ -38,14 +41,16 @@ export default function SmokerPicker({
   };
 
   return (
-    <div className="flex flex-col items-start gap-6">
-      <p className="text-xl font-medium">Do you smoke?</p>
+    <TypeWriter text="Do you smoke?" isSelected={isSelected}>
       <div>
         <div className="flex gap-8">
           <Button
             onClick={() => handleClick(true)}
             variant={doSmoke === true ? "default" : "ghost"}
-            className="flex flex-col items-center w-24 h-24 p-4 rounded-lg"
+            className={cn(
+              "flex flex-col items-center w-24 h-24 p-4 rounded-lg",
+              "shadow-[0_2px_8px_rgba(0,0,0,0.08)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.12)] transition-shadow duration-200",
+            )}
           >
             <Image
               src="/icons/smoker.svg"
@@ -58,7 +63,10 @@ export default function SmokerPicker({
           <Button
             onClick={() => handleClick(false)}
             variant={doSmoke === false ? "default" : "ghost"}
-            className="flex flex-col items-center w-24 h-24 p-4 rounded-lg"
+            className={cn(
+              "flex flex-col items-center w-24 h-24 p-4 rounded-lg",
+              "shadow-[0_2px_8px_rgba(0,0,0,0.08)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.12)] transition-shadow duration-200",
+            )}
           >
             <Image
               src="/icons/non-smoker.svg"
@@ -73,6 +81,6 @@ export default function SmokerPicker({
           Who is classifed as smoker ?
         </span>
       </div>
-    </div>
+    </TypeWriter>
   );
 }

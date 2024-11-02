@@ -6,6 +6,7 @@ import React from "react";
 import useStore from "~/store";
 import { updateBmi } from "../actions";
 import { Button } from "@repo/ui/components/ui/button";
+import { TypeWriter } from "~/components/type-writer";
 
 type BmiStepProperties = {
   height: number | null;
@@ -15,6 +16,7 @@ type BmiStepProperties = {
 
 interface BmiPickerProps {
   stepProperties: BmiStepProperties;
+  isSelected?: boolean;
   onUpdate: (properties: Partial<BmiStepProperties>) => void;
 }
 
@@ -24,6 +26,7 @@ export default function BmiPicker({
     weight: null,
     bmi: null,
   },
+  isSelected = false,
   onUpdate,
 }: BmiPickerProps) {
   const [step, setStep] = useQueryState("step", parseAsInteger.withDefault(0));
@@ -81,49 +84,50 @@ export default function BmiPicker({
   console.log(stepProperties);
   return (
     <div>
-      <p>
-        Let's get your BMI! Just enter your height and weight below. All Info is
-        kept confidential
-      </p>
-      <div className="mt-4">
-        <h1 className="text-2xl">BMI: {bmi ?? "XX.X"}</h1>
-        <div className="mt-4 flex flex-row gap-4">
-          <Input
-            type="number"
-            placeholder="Height (cm)"
-            className="w-full text-lg h-14"
-            style={{ WebkitAppearance: "none", MozAppearance: "textfield" }}
-            onChange={(e) => handleHeightChange(e.target.value)}
-            value={height}
-          />
-          <Input
-            type="number"
-            placeholder="Weight (kg)"
-            className="w-full text-lg h-14"
-            style={{ WebkitAppearance: "none", MozAppearance: "textfield" }}
-            onChange={(e) => handleWeightChange(e.target.value)}
-            value={weight}
-          />
-        </div>
+      <TypeWriter
+        text="Let's get your BMI! Just enter your height and weight below. All Info is kept confidential"
+        isSelected={isSelected}
+      >
         <div className="mt-4">
-          <Button
-            disabled={!bmi}
-            className="w-fit float-right"
-            onClick={async () => {
-              if (!customerId || !bmi) return;
-              await updateBmi(customerId, bmi);
-              onUpdate({
-                height: parseFloat(height),
-                weight: parseFloat(weight),
-                bmi: bmi,
-              });
-              setStep(step + 1);
-            }}
-          >
-            Continue
-          </Button>
+          <h1 className="text-2xl">BMI: {bmi ?? "XX.X"}</h1>
+          <div className="mt-4 flex flex-row gap-4">
+            <Input
+              type="number"
+              placeholder="Height (cm)"
+              className="w-full text-lg h-14"
+              style={{ WebkitAppearance: "none", MozAppearance: "textfield" }}
+              onChange={(e) => handleHeightChange(e.target.value)}
+              value={height}
+            />
+            <Input
+              type="number"
+              placeholder="Weight (kg)"
+              className="w-full text-lg h-14"
+              style={{ WebkitAppearance: "none", MozAppearance: "textfield" }}
+              onChange={(e) => handleWeightChange(e.target.value)}
+              value={weight}
+            />
+          </div>
+          <div className="mt-4">
+            <Button
+              disabled={!bmi}
+              className="w-fit float-right"
+              onClick={async () => {
+                if (!customerId || !bmi) return;
+                await updateBmi(customerId, bmi);
+                onUpdate({
+                  height: parseFloat(height),
+                  weight: parseFloat(weight),
+                  bmi: bmi,
+                });
+                setStep(step + 1);
+              }}
+            >
+              Continue
+            </Button>
+          </div>
         </div>
-      </div>
+      </TypeWriter>
     </div>
   );
 }

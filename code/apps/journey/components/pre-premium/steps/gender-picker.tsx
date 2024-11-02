@@ -7,6 +7,7 @@ import useStore from "~/store";
 import { updateGender } from "../actions";
 import Image from "next/image";
 import { useState } from "react";
+import { TypeWriter } from "~/components/type-writer";
 
 type GenderType = "male" | "female" | null;
 
@@ -17,6 +18,7 @@ type GenderProperties = {
 interface GenderPickerProps {
   stepProperties?: GenderProperties;
   onUpdate?: (properties: Partial<GenderProperties>) => void;
+  isSelected?: boolean;
 }
 
 export default function GenderPicker({
@@ -24,6 +26,7 @@ export default function GenderPicker({
     gender: null,
   },
   onUpdate,
+  isSelected = false,
 }: GenderPickerProps) {
   const [step, setStep] = useQueryState("step", parseAsInteger.withDefault(0));
   const customerId = useStore((state) => state.customerId);
@@ -42,8 +45,7 @@ export default function GenderPicker({
   };
 
   return (
-    <div className="flex flex-col items-start gap-6">
-      <p className="text-xl font-medium">Which gender are you?</p>
+    <TypeWriter text="Which gender are you?" isSelected={isSelected}>
       <div>
         <div className="flex gap-8">
           <Button
@@ -77,6 +79,6 @@ export default function GenderPicker({
           Why is this important?
         </span>
       </div>
-    </div>
+    </TypeWriter>
   );
 }

@@ -7,7 +7,7 @@ import { Button } from "@repo/ui/components/ui/button";
 import useStore from "~/store";
 import { MedicalHistory } from "@repo/db";
 import { updateHealthQuestions } from "../actions";
-
+import { TypeWriter } from "~/components/type-writer";
 type HealthQuestionsProperties = {
   hasChronicIllness: boolean | null;
   hasHospitalization: boolean | null;
@@ -21,6 +21,7 @@ type HealthQuestionsProperties = {
 
 interface HealthQuestionsProps {
   stepProperties: HealthQuestionsProperties;
+  isSelected?: boolean;
   onUpdate: (properties: Partial<HealthQuestionsProperties>) => void;
 }
 
@@ -35,6 +36,7 @@ export default function HealthQuestions({
     seriousIllnessesInfo: "",
     medicationInfo: "",
   },
+  isSelected = false,
   onUpdate,
 }: HealthQuestionsProps) {
   const [step, setStep] = useQueryState("step", parseAsInteger.withDefault(0));
@@ -117,165 +119,168 @@ export default function HealthQuestions({
 
   return (
     <div className="flex flex-col gap-4">
-      <p>Just a few quick health questions to finalize your application :)</p>
-
-      <div className="flex flex-col gap-6">
-        <div className="space-y-2">
-          <p className="text-sm opacity-75">
-            Do you have any chronic illnesses, like diabetes or high blood
-            pressure?
-          </p>
-          <div className="flex gap-4">
-            <Button
-              variant={hasChronicIllness === true ? "default" : "outline"}
-              size="lg"
-              onClick={() => handleSelection(setHasChronicIllness, true)}
-            >
-              Yes
-            </Button>
-            <Button
-              variant={hasChronicIllness === false ? "default" : "outline"}
-              size="lg"
-              onClick={() => handleSelection(setHasChronicIllness, false)}
-            >
-              No
-            </Button>
-          </div>
-          {hasChronicIllness && (
-            <div className="space-y-2 mt-2">
-              <p className="text-sm opacity-75">
-                Please describe your chronic illness(es):
-              </p>
-              <Input
-                placeholder="Enter details about your chronic illness"
-                value={chronicIllnessesInfo ?? ""}
-                onChange={(e) => setChronicIllnessesInfo(e.target.value)}
-              />
-            </div>
-          )}
-        </div>
-
-        <div className="space-y-2">
-          <p className="text-sm opacity-75">
-            In the last 5 years, have you been hospitalized or had any
-            surgeries?
-          </p>
-          <div className="flex gap-4">
-            <Button
-              variant={hasHospitalization === true ? "default" : "outline"}
-              size="lg"
-              onClick={() => handleSelection(setHasHospitalization, true)}
-            >
-              Yes
-            </Button>
-            <Button
-              variant={hasHospitalization === false ? "default" : "outline"}
-              size="lg"
-              onClick={() => handleSelection(setHasHospitalization, false)}
-            >
-              No
-            </Button>
-          </div>
-          {hasHospitalization && (
-            <div className="space-y-2 mt-2">
-              <p className="text-sm opacity-75">
-                Please provide details about your hospitalization/surgeries:
-              </p>
-              <Input
-                placeholder="Enter details about your hospital stays or surgeries"
-                value={hospitalizationInfo ?? ""}
-                onChange={(e) => setHospitalizationInfo(e.target.value)}
-              />
-            </div>
-          )}
-        </div>
-
-        <div className="space-y-2">
-          <p className="text-sm opacity-75">
-            Have you ever been diagnosed with a serious illness, like cancer or
-            a heart condition?
-          </p>
-          <div className="flex gap-4">
-            <Button
-              variant={hasSeriousIllness === true ? "default" : "outline"}
-              size="lg"
-              onClick={() => handleSelection(setHasSeriousIllness, true)}
-            >
-              Yes
-            </Button>
-            <Button
-              variant={hasSeriousIllness === false ? "default" : "outline"}
-              size="lg"
-              onClick={() => handleSelection(setHasSeriousIllness, false)}
-            >
-              No
-            </Button>
-          </div>
-          {hasSeriousIllness && (
-            <div className="space-y-2 mt-2">
-              <p className="text-sm opacity-75">
-                Please describe your serious illness(es):
-              </p>
-              <Input
-                placeholder="Enter details about your serious illness"
-                value={seriousIllnessesInfo ?? ""}
-                onChange={(e) => setSeriousIllnessesInfo(e.target.value)}
-              />
-            </div>
-          )}
-        </div>
-
-        <div className="space-y-2">
-          <p className="text-sm opacity-75">
-            Are you taking any prescription medication?
-          </p>
-          <div className="flex gap-4">
-            <Button
-              variant={hasPrescription === true ? "default" : "outline"}
-              size="lg"
-              onClick={() => handleSelection(setHasPrescription, true)}
-            >
-              Yes
-            </Button>
-            <Button
-              variant={hasPrescription === false ? "default" : "outline"}
-              size="lg"
-              onClick={() => handleSelection(setHasPrescription, false)}
-            >
-              No
-            </Button>
-          </div>
-          {hasPrescription && (
-            <div className="space-y-2 mt-2">
-              <p className="text-sm opacity-75">
-                Please list your current medications:
-              </p>
-              <Input
-                placeholder="Enter your current medications"
-                value={medicationInfo ?? ""}
-                onChange={(e) => setMedicationInfo(e.target.value)}
-              />
-            </div>
-          )}
-        </div>
-      </div>
-
-      <Button
-        disabled={
-          hasChronicIllness == null ||
-          hasHospitalization == null ||
-          hasSeriousIllness == null ||
-          hasPrescription == null ||
-          (hasChronicIllness && chronicIllnessesInfo === "") ||
-          (hasHospitalization && hospitalizationInfo === "") ||
-          (hasSeriousIllness && seriousIllnessesInfo === "") ||
-          (hasPrescription && medicationInfo === "")
-        }
-        className="mt-4 ml-auto w-32"
-        onClick={() => handleSubmit()}
+      <TypeWriter
+        isSelected={isSelected}
+        text="Just a few quick health questions to finalize your application"
       >
-        Continue
-      </Button>
+        <div className="flex flex-col gap-6">
+          <div className="space-y-2">
+            <p className="text-sm opacity-75">
+              Do you have any chronic illnesses, like diabetes or high blood
+              pressure?
+            </p>
+            <div className="flex gap-4">
+              <Button
+                variant={hasChronicIllness === true ? "default" : "outline"}
+                size="lg"
+                onClick={() => handleSelection(setHasChronicIllness, true)}
+              >
+                Yes
+              </Button>
+              <Button
+                variant={hasChronicIllness === false ? "default" : "outline"}
+                size="lg"
+                onClick={() => handleSelection(setHasChronicIllness, false)}
+              >
+                No
+              </Button>
+            </div>
+            {hasChronicIllness && (
+              <div className="space-y-2 mt-2">
+                <p className="text-sm opacity-75">
+                  Please describe your chronic illness(es):
+                </p>
+                <Input
+                  placeholder="Enter details about your chronic illness"
+                  value={chronicIllnessesInfo ?? ""}
+                  onChange={(e) => setChronicIllnessesInfo(e.target.value)}
+                />
+              </div>
+            )}
+          </div>
+
+          <div className="space-y-2">
+            <p className="text-sm opacity-75">
+              In the last 5 years, have you been hospitalized or had any
+              surgeries?
+            </p>
+            <div className="flex gap-4">
+              <Button
+                variant={hasHospitalization === true ? "default" : "outline"}
+                size="lg"
+                onClick={() => handleSelection(setHasHospitalization, true)}
+              >
+                Yes
+              </Button>
+              <Button
+                variant={hasHospitalization === false ? "default" : "outline"}
+                size="lg"
+                onClick={() => handleSelection(setHasHospitalization, false)}
+              >
+                No
+              </Button>
+            </div>
+            {hasHospitalization && (
+              <div className="space-y-2 mt-2">
+                <p className="text-sm opacity-75">
+                  Please provide details about your hospitalization/surgeries:
+                </p>
+                <Input
+                  placeholder="Enter details about your hospital stays or surgeries"
+                  value={hospitalizationInfo ?? ""}
+                  onChange={(e) => setHospitalizationInfo(e.target.value)}
+                />
+              </div>
+            )}
+          </div>
+
+          <div className="space-y-2">
+            <p className="text-sm opacity-75">
+              Have you ever been diagnosed with a serious illness, like cancer
+              or a heart condition?
+            </p>
+            <div className="flex gap-4">
+              <Button
+                variant={hasSeriousIllness === true ? "default" : "outline"}
+                size="lg"
+                onClick={() => handleSelection(setHasSeriousIllness, true)}
+              >
+                Yes
+              </Button>
+              <Button
+                variant={hasSeriousIllness === false ? "default" : "outline"}
+                size="lg"
+                onClick={() => handleSelection(setHasSeriousIllness, false)}
+              >
+                No
+              </Button>
+            </div>
+            {hasSeriousIllness && (
+              <div className="space-y-2 mt-2">
+                <p className="text-sm opacity-75">
+                  Please describe your serious illness(es):
+                </p>
+                <Input
+                  placeholder="Enter details about your serious illness"
+                  value={seriousIllnessesInfo ?? ""}
+                  onChange={(e) => setSeriousIllnessesInfo(e.target.value)}
+                />
+              </div>
+            )}
+          </div>
+
+          <div className="space-y-2">
+            <p className="text-sm opacity-75">
+              Are you taking any prescription medication?
+            </p>
+            <div className="flex gap-4">
+              <Button
+                variant={hasPrescription === true ? "default" : "outline"}
+                size="lg"
+                onClick={() => handleSelection(setHasPrescription, true)}
+              >
+                Yes
+              </Button>
+              <Button
+                variant={hasPrescription === false ? "default" : "outline"}
+                size="lg"
+                onClick={() => handleSelection(setHasPrescription, false)}
+              >
+                No
+              </Button>
+            </div>
+            {hasPrescription && (
+              <div className="space-y-2 mt-2">
+                <p className="text-sm opacity-75">
+                  Please list your current medications:
+                </p>
+                <Input
+                  placeholder="Enter your current medications"
+                  value={medicationInfo ?? ""}
+                  onChange={(e) => setMedicationInfo(e.target.value)}
+                />
+              </div>
+            )}
+          </div>
+        </div>
+
+        <Button
+          disabled={
+            hasChronicIllness == null ||
+            hasHospitalization == null ||
+            hasSeriousIllness == null ||
+            hasPrescription == null ||
+            (hasChronicIllness && chronicIllnessesInfo === "") ||
+            (hasHospitalization && hospitalizationInfo === "") ||
+            (hasSeriousIllness && seriousIllnessesInfo === "") ||
+            (hasPrescription && medicationInfo === "")
+          }
+          className="mt-4 ml-auto w-32"
+          onClick={() => handleSubmit()}
+        >
+          Continue
+        </Button>
+      </TypeWriter>
     </div>
   );
 }
