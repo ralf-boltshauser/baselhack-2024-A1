@@ -19,6 +19,18 @@
       "cache": false
     },
     "db:push": {
+      "env": [
+        "POSTGRES_URL",
+        "POSTGRES_PRISMA_URL",
+        "POSTGRES_URL_NON_POOLING",
+        "POSTGRES_USER",
+        "POSTGRES_HOST",
+        "POSTGRES_PASSWORD",
+        "POSTGRES_DATABASE"
+      ],
+      "cache": false
+    },
+    "db:studio": {
       "cache": false
     }
   }
