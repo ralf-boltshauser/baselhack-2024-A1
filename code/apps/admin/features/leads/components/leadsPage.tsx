@@ -7,80 +7,81 @@ import {
 } from "@repo/ui/components/ui/tabs";
 import { Download } from "lucide-react";
 import LeadsTable from "./leadsTable";
-import { Customer, Status } from "@repo/db";
+import { Status } from "@repo/db";
+import { getAllLeads } from "../actions/get-leads";
 
 // Sample data
-const leads: Customer[] = [
-  {
-    id: BigInt(1),
-    requestDate: new Date("2023-05-01"),
-    name: "John Doe",
-    email: "dummy@test.com",
-    insuranceSum: 100000,
-    trafficLightColor: "green",
-    status: "accepted",
-    duration: 1,
-    premium: 1000,
-  },
-  {
-    id: BigInt(2),
-    requestDate: new Date("2023-05-02"),
-    name: "Jane Smith",
-    insuranceSum: 200000,
-    email: "dummy@test.com",
-    status: "rejected",
-    trafficLightColor: "red",
-    decisiveFactor: "healthCheck",
-    duration: 2,
-    premium: 1800,
-  },
-  {
-    id: BigInt(3),
-    requestDate: new Date("2023-05-03"),
-    name: "Bob Johnson",
-    insuranceSum: 150000,
-    email: "dummy@test.com",
-    status: "accepted_with_conditions",
-    trafficLightColor: "orange",
-    decisiveFactor: "score",
-    duration: 1,
-    premium: 1200,
-  },
-  {
-    id: BigInt(4),
-    requestDate: new Date("2023-05-04"),
-    name: "Alice Brown",
-    email: "dummy@test.com",
-    insuranceSum: 300000,
-    status: "requesting_documents",
-    trafficLightColor: "orange",
-    decisiveFactor: "healthCheck",
-    duration: 3,
-    premium: 2500,
-  },
-  {
-    id: BigInt(99),
-    requestDate: new Date("2023-05-04"),
-    name: "Alice Brown",
-    email: "dummy@test.com",
-    insuranceSum: 300000,
-    status: "draft",
-    duration: 3,
-    premium: 2500,
-  },
-  {
-    id: BigInt(5),
-    requestDate: new Date("2023-05-05"),
-    name: "Charlie Wilson",
-    email: "dummy@test.com",
-    status: "waiting_for_approval",
-    insuranceSum: 250000,
-    trafficLightColor: "orange",
-    decisiveFactor: "score",
-    duration: 2,
-    premium: 2000,
-  },
-];
+// const leads: Customer[] = [
+//   {
+//     id: BigInt(1),
+//     requestDate: new Date("2023-05-01"),
+//     name: "John Doe",
+//     email: "dummy@test.com",
+//     insuranceSum: 100000,
+//     trafficLightColor: "green",
+//     status: "accepted",
+//     duration: 1,
+//     premium: 1000,
+//   },
+//   {
+//     id: BigInt(2),
+//     requestDate: new Date("2023-05-02"),
+//     name: "Jane Smith",
+//     insuranceSum: 200000,
+//     email: "dummy@test.com",
+//     status: "rejected",
+//     trafficLightColor: "red",
+//     decisiveFactor: "healthCheck",
+//     duration: 2,
+//     premium: 1800,
+//   },
+//   {
+//     id: BigInt(3),
+//     requestDate: new Date("2023-05-03"),
+//     name: "Bob Johnson",
+//     insuranceSum: 150000,
+//     email: "dummy@test.com",
+//     status: "accepted_with_conditions",
+//     trafficLightColor: "orange",
+//     decisiveFactor: "score",
+//     duration: 1,
+//     premium: 1200,
+//   },
+//   {
+//     id: BigInt(4),
+//     requestDate: new Date("2023-05-04"),
+//     name: "Alice Brown",
+//     email: "dummy@test.com",
+//     insuranceSum: 300000,
+//     status: "requesting_documents",
+//     trafficLightColor: "orange",
+//     decisiveFactor: "healthCheck",
+//     duration: 3,
+//     premium: 2500,
+//   },
+//   {
+//     id: BigInt(99),
+//     requestDate: new Date("2023-05-04"),
+//     name: "Alice Brown",
+//     email: "dummy@test.com",
+//     insuranceSum: 300000,
+//     status: "draft",
+//     duration: 3,
+//     premium: 2500,
+//   },
+//   {
+//     id: BigInt(5),
+//     requestDate: new Date("2023-05-05"),
+//     name: "Charlie Wilson",
+//     email: "dummy@test.com",
+//     status: "waiting_for_approval",
+//     insuranceSum: 250000,
+//     trafficLightColor: "orange",
+//     decisiveFactor: "score",
+//     duration: 2,
+//     premium: 2000,
+//   },
+// ];
 
 const archivedLeadStatuses: Status[] = [
   "accepted",
@@ -94,13 +95,21 @@ const activeLeadStatuses: Status[] = [
 ] as const;
 
 export default async function LeadsPage() {
-  const activeLeads = leads.filter((lead) =>
+  const leads = await getAllLeads();
+
+  console.log("leads", leads);
+
+  if (!leads || leads.data === null || leads.data === undefined) {
+    throw new Error("No leads found");
+  }
+
+  const activeLeads = leads.data.filter((lead) =>
     activeLeadStatuses.includes(lead.status as Status),
   );
-  const archivedLeads = leads.filter((lead) =>
+  const archivedLeads = leads.data.filter((lead) =>
     archivedLeadStatuses.includes(lead.status as Status),
   );
-  const draftLeads = leads.filter((lead) => lead.status === "draft");
+  const draftLeads = leads.data.filter((lead) => lead.status === "draft");
 
   return (
     <div className="w-full">

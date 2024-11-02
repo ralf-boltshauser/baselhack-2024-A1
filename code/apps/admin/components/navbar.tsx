@@ -12,7 +12,7 @@ import {
 import Link from "next/link";
 
 export default function Navbar() {
-  const { user } = useUser();
+  const { user, isLoaded } = useUser();
 
   return (
     <nav className="flex items-center justify-between px-12 pb-4 pt-8 bg-white shadow-md">
@@ -33,27 +33,40 @@ export default function Navbar() {
           <NavItem href="/configuration">Configuration</NavItem>
         </div>
       </div>
-      <div className="flex items-center space-x-4">
-        <button className="text-gray-600 hover:text-gray-800">
-          <Bell className="w-5 h-5" />
-          <span className="sr-only">Notifications</span>
-        </button>
-        <div className="w-px h-6 bg-gray-200" aria-hidden="true" />
-        <div className="flex items-center space-x-3">
-          <Avatar className="w-10 h-10">
-            <AvatarImage src={user?.imageUrl} alt={user?.fullName || "..."} />
-            <AvatarFallback>{user?.firstName?.charAt(0) || "?"}</AvatarFallback>
-          </Avatar>
-          <div className="flex flex-col">
-            <span className="text-sm font-medium text-gray-900">
-              {user?.fullName || "loading..."}
-            </span>
-            <span className="text-xs text-gray-500">
-              {user?.emailAddresses[0]?.emailAddress || "loading..."}
-            </span>
+      {isLoaded && (
+        <div className="flex items-center space-x-4">
+          <button className="text-gray-600 hover:text-gray-800">
+            <Bell className="w-5 h-5" />
+            <span className="sr-only">Notifications</span>
+          </button>
+          <div className="w-px h-6 bg-gray-200" aria-hidden="true" />
+          <div className="flex items-center space-x-3">
+            <Avatar className="w-10 h-10">
+              <AvatarImage src={user?.imageUrl} alt={user?.fullName || "..."} />
+              <AvatarFallback>
+                {user?.firstName?.charAt(0) || "?"}
+              </AvatarFallback>
+            </Avatar>
+            <div className="flex flex-col">
+              <span className="text-sm font-medium text-gray-900">
+                {user?.fullName || "loading..."}
+              </span>
+              <span className="text-xs text-gray-500">
+                {user?.emailAddresses[0]?.emailAddress || "loading..."}
+              </span>
+            </div>
           </div>
         </div>
-      </div>
+      )}
+      {!isLoaded && (
+        <div className="flex items-center space-x-4">
+          <div className="w-10 h-10 bg-gray-200 rounded-full animate-pulse" />
+          <div className="flex flex-col space-y-2">
+            <div className="w-24 h-4 bg-gray-200 rounded animate-pulse" />
+            <div className="w-32 h-3 bg-gray-200 rounded animate-pulse" />
+          </div>
+        </div>
+      )}
     </nav>
   );
 }

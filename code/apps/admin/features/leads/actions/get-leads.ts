@@ -27,3 +27,7 @@ export const getMyLeads = authActionClient
       });
     },
   );
+
+export const getAllLeads = authActionClient.action(async () => {
+  return prisma.customer.findMany();
+});
