@@ -14,87 +14,91 @@ datasource db {
   directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
 }
 
-model ScoringMetric {
-  id          BigInt @id @default(autoincrement())
-  metricName  String
-  metricValue String
-  score       Int
+model AttributeMultiplier {
+  id         Int           @id @default(autoincrement())
+  attribute  AttributeName
+  multiplier Float
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
 }
 
 model Employee {
-  id        BigInt     @id @default(autoincrement())
+  id        Int        @id @default(autoincrement())
   clerkId   String     @unique
   name      String
   avatarUrl String?
-  position  String
   email     String     @unique
   phone     String?
   customers Customer[]
 }
 
 model PastOperation {
-  id            BigInt    @id @default(autoincrement())
-  customerId    BigInt
+  id            Int       @id @default(autoincrement())
+  customerId    Int
   description   String
   operationDate DateTime?
   customer      Customer  @relation(fields: [customerId], references: [id])
 }
 
 model Customer {
-  cardiacIssuesScore     Int?
-  diabeticConditionScore Int?
-  hypertensionScore      Int?
-  step                   Int?
-  bmiScore               Int?
-  smokeScore             Int?
-  jobScore               Int?
-  addressScore           Int?
-  ageScore               Int?
-  employeeIdScore        Int?
-  insuranceSumScore      Int?
-  durationScore          Int?
-  premiumScore           Int?
-  statusScore            Int?
-  genderScore            Int?
-  decisiveFactorScore    Int?
-  trafficLightScore      Int?
-  requestDateScore       Int?
-  id                     BigInt             @id @default(autoincrement())
-  name                   String?
-  address                String?
-  birthdate              DateTime?
-  smoking                Boolean?
-  bmi                    Float?
-  job                    String?
-  employeeId             BigInt?
-  insuranceSum           Float?
-  duration               Int?
-  premium                Float?
-  status                 Status?            @default(draft)
-  requestDate            DateTime           @default(now())
-  email                  String?            @unique
-  gender                 Gender?
-  decisiveFactor         DecisiveFactor?
-  idDocument             String[]
-  trafficLightColor      TrafficLightColor?
-  documents              Document[]
-  employee               Employee?          @relation(fields: [employeeId], references: [id])
-  pastOperation          PastOperation[]
-  medicalHistory         MedicalHistory?
+  cardiacIssues           Boolean?
+  diabeticCondition       Boolean?
+  hypertension            Boolean?
+  cardiacIssuesScore      Int?
+  diabeticConditionScore  Int?
+  hypertensionScore       Int?
+  step                    Int?
+  bmiScore                Int?
+  smokeScore              Int?
+  jobScore                Int?
+  addressScore            Int?
+  ageScore                Int?
+  employeeIdScore         Int?
+  insuranceSumScore       Int?
+  durationScore           Int?
+  premiumScore            Int?
+  statusScore             Int?
+  genderScore             Int?
+  decisiveFactorScore     Int?
+  trafficLightScore       Int?
+  requestDateScore        Int?
+  id                      Int                @id @default(autoincrement())
+  name                    String?
+  address                 String?
+  birthdate               DateTime?
+  smoking                 Boolean?
+  bmi                     Float?
+  job                     String?
+  employeeId              Int?
+  insuranceSum            Float?
+  recommendedInsuranceSum Float?
+  duration                Int?
+  premium                 Float?
+  status                  Status?            @default(draft)
+  requestDate             DateTime           @default(now())
+  email                   String?            @unique
+  gender                  Gender?
+  decisiveFactor          DecisiveFactor?
+  idDocument              String[]           @default([])
+  trafficLightColor       TrafficLightColor?
+  documents               Document[]
+  employee                Employee?          @relation(fields: [employeeId], references: [id])
+  pastOperation           PastOperation[]
+  medicalHistory          MedicalHistory?
 }
 
 model Document {
-  id         BigInt   @id @default(autoincrement())
+  id         Int      @id @default(autoincrement())
   customer   Customer @relation(fields: [customerId], references: [id])
-  customerId BigInt
-  fileUrl    String
+  customerId Int
+  fileUrl    String?
   uploadDate DateTime @default(now())
   title      String
 }
 
 model MedicalHistory {
   id         BigInt   @id @default(autoincrement())
-  customerId BigInt   @unique
+  customerId Int      @unique
   customer   Customer @relation(fields: [customerId], references: [id])
 
   hasChronicIllnesses  Boolean @default(false)
@@ -112,8 +116,10 @@ model MedicalHistory {
 
 enum Status {
   draft
-  waiting_for_approval
+  waiting_for_counter_offer
   requesting_documents
+  waiting_for_documents
+  review_documents
   accepted
   rejected
   accepted_with_conditions

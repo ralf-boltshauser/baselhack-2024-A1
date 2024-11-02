@@ -35,7 +35,6 @@ export default function Main({
   const [height, setHeight] = useState(0);
 
   function adjustHeight() {
-    console.log("adjusting height", divRef.current);
     if (divRef.current) {
       setHeight((divRef.current as HTMLDivElement).offsetHeight);
     }
