@@ -1,14 +1,14 @@
+import { Status } from "@repo/db";
 import { Button } from "@repo/ui/components/ui/button";
 import {
   Tabs,
+  TabsContent,
   TabsList,
   TabsTrigger,
-  TabsContent,
 } from "@repo/ui/components/ui/tabs";
 import { Download } from "lucide-react";
-import LeadsTable from "./leadsTable";
-import { Status } from "@repo/db";
 import { getAllLeads } from "../actions/get-leads";
+import LeadsTable from "./leadsTable";
 
 // Sample data
 // const leads: Customer[] = [
@@ -92,6 +92,7 @@ const archivedLeadStatuses: Status[] = [
 const activeLeadStatuses: Status[] = [
   "requesting_documents",
   "waiting_for_counter_offer",
+  "waiting_for_documents",
   "review_documents",
 ] as const;
 

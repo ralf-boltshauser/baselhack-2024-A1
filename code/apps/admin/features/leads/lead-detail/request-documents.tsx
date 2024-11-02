@@ -4,6 +4,7 @@ import Image from "next/image";
 
 import { Badge } from "@repo/ui/components/ui/badge";
 import { Button } from "@repo/ui/components/ui/button";
+import { DialogClose } from "@repo/ui/components/ui/dialog";
 import { Input } from "@repo/ui/components/ui/input";
 import { X } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
@@ -24,7 +25,7 @@ export default function RequestDocuments({ lead }: { lead: Customer }) {
   const [documents, setDocuments] = useState<string[]>(recommendedDocuments);
   const { execute } = useAction(requestDocuments);
   return (
-    <div className="bg-gray-100 p-12">
+    <div className="">
       <div className="flex flex-row gap-4 justify-start items-start">
         <Image
           src="/green-wizard.png"
@@ -76,18 +77,20 @@ export default function RequestDocuments({ lead }: { lead: Customer }) {
                   }}
                 />
               </div>
-              <Button
-                className="w-full"
-                size={"lg"}
-                onClick={() => {
-                  execute({
-                    customerId: lead.id.toString(),
-                    documents: documents,
-                  });
-                }}
-              >
-                Request Documents
-              </Button>
+              <DialogClose asChild>
+                <Button
+                  className="w-full"
+                  size={"lg"}
+                  onClick={() => {
+                    execute({
+                      customerId: lead.id.toString(),
+                      documents: documents,
+                    });
+                  }}
+                >
+                  Request Documents
+                </Button>
+              </DialogClose>
             </div>
           </div>
         </div>
