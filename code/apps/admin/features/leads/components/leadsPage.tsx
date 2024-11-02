@@ -27,7 +27,7 @@ export default async function LeadsPage() {
   const leads = await getMyLeads();
 
   if (!leads || leads.data === null || leads.data === undefined) {
-    throw new Error("No leads found");
+    return <div>No leads found</div>;
   }
 
   const activeLeads = leads.data.filter((lead) =>
