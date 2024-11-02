@@ -13,7 +13,8 @@ import useStore from "~/store";
 import { createCustomer } from "./actions";
 import GenderPicker from "./steps/gender-picker";
 import Intro from "./steps/testing-comp";
-
+import BirthdayPicker from "./steps/birthday-picker";
+import SmokerPicker from "./steps/smoker-picker";
 export default function Main() {
   const [step, setStep] = useQueryState("step", parseAsInteger.withDefault(0));
 
@@ -23,7 +24,7 @@ export default function Main() {
     enabled: false, // This prevents the query from running automatically on mount
   });
 
-  const divRef = useRef(null);
+  const divRef = useRef<HTMLDivElement | null>(null);
   const [height, setHeight] = useState(0);
 
   function adjustHeight() {
@@ -63,8 +64,7 @@ export default function Main() {
       }, 3000);
     }
   }, [step]);
-
-  const handleRefAssignement = (el: HTMLDivElement) => {
+  const handleRefAssignement = (el: HTMLDivElement | null) => {
     divRef.current = el;
     adjustHeight();
   };
@@ -81,6 +81,14 @@ export default function Main() {
     {
       key: "genderPicker",
       component: <GenderPicker />,
+    },
+    {
+      key: "birthdayPicker",
+      component: <BirthdayPicker />,
+    },
+    {
+      key: "smokerPicker",
+      component: <SmokerPicker />,
     },
   ];
 

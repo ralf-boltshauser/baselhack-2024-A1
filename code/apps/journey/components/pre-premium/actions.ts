@@ -17,3 +17,17 @@ export async function updateGender(customerId: number, gender: Gender) {
     data: { gender },
   });
 }
+
+export async function updateBirthday(customerId: number, birthday: Date) {
+  await prisma.customer.update({
+    where: { id: customerId },
+    data: { birthdate: birthday },
+  });
+}
+
+export async function updateSmokerStatus(customerId: number, isSmoker: boolean) {
+  await prisma.customer.update({
+    where: { id: customerId },
+    data: { smoking: isSmoker },
+  });
+}
