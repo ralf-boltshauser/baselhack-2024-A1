@@ -10,6 +10,7 @@ import { calculateInsurancePrice } from "~/components/pre-premium/actions";
 import { getCustomer } from "~/components/pre-premium/actions";
 import { Customer } from "@repo/db";
 import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
 
 export default function Component() {
   const [mounted, setMounted] = useState(false);
@@ -48,7 +49,14 @@ export default function Component() {
   if (isLoading) {
     return (
       <div className="h-screen flex flex-col items-center justify-center space-y-4">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+        <div 
+          className="animate-spin rounded-full h-12 w-12 border border-primary/20" 
+          style={{ 
+            animationDuration: '1.5s',
+            borderTopColor: 'var(--primary)',
+            borderWidth: '1px'
+          }}
+        ></div>
         <div className="text-center">
           <p className="font-medium text-lg">Hang Tight!</p>
           <p className="text-muted-foreground">We're calculating your personal offer...</p>
@@ -58,17 +66,32 @@ export default function Component() {
   }
 
   return (
-    <div className="max-w-md mx-auto p-4 space-y-6">
-      <div className="flex items-center gap-3">
+    <motion.div 
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.6 }}
+      className="max-w-md mx-auto p-4 space-y-6"
+    >
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2, duration: 0.5 }}
+        className="flex items-center gap-3"
+      >
         <Avatar>
           <AvatarImage src="/placeholder.svg" alt="Avatar" />
           <AvatarFallback>CS</AvatarFallback>
         </Avatar>
         <p className="text-sm">Your offer's ready! Tap 'Get Covered in 5 Minutes' to finish up.</p>
-      </div>
+      </motion.div>
 
-      <Card className="border-t-8 border-t-primary">
-        <CardHeader className="text-center space-y-1">
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.4, duration: 0.6, ease: "easeOut" }}
+      >
+        <Card className="border-t-8 border-t-primary">
+          <CardHeader className="text-center space-y-1">
           <h2 className="text-lg font-medium">Your Pax Death Insurance</h2>
           <div className="space-y-1">
             <div className="flex items-baseline justify-center gap-2">
@@ -120,11 +143,17 @@ export default function Component() {
                 </Button>
               </div>
             </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      <div className="space-y-3">
+            </div>
+          </CardContent>
+        </Card>
+      </motion.div>
+    
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.7, duration: 0.5 }}
+        className="space-y-3"
+      >
         <Button className="w-full" size="lg" onClick={() => router.push('/post-premium')}>
           Get Covered in 5 Minutes
         </Button>
@@ -134,7 +163,7 @@ export default function Component() {
         >
           When does the death insurance pay out?
         </Link>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   )
 }

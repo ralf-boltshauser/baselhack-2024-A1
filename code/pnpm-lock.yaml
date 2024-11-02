@@ -100,12 +100,18 @@ importers:
       '@tanstack/react-query':
         specifier: ^5.59.16
         version: 5.59.16(react@18.3.1)
+      '@types/lodash':
+        specifier: ^4.17.13
+        version: 4.17.13
       '@types/react-signature-canvas':
         specifier: ^1.0.6
         version: 1.0.6
       framer-motion:
         specifier: ^11.11.11
         version: 11.11.11(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      lodash:
+        specifier: ^4.17.21
+        version: 4.17.21
       lucide-react:
         specifier: ^0.395.0
         version: 0.395.0(react@18.3.1)

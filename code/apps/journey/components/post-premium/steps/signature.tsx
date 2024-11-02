@@ -3,18 +3,28 @@
 import { useCallback, useState } from "react";
 import { SignatureField } from "../../signature-field";
 import { Button } from "@repo/ui/components/ui/button";
+import { ToastPage } from "./toast";
 
-export function SignatureStep() {
+interface SignatureStepProps {
+  onAccept: () => void;
+}
+
+export const SignatureStep = ({ onAccept }: SignatureStepProps) => {
   const [signature, setSignature] = useState<string | null>(null);
+  const [showToast, setShowToast] = useState(false);
 
   const handleSignatureChange = useCallback((newSignature: string | null) => {
     setSignature(newSignature);
   }, []);
 
   const handleAccept = useCallback(() => {
-    // Handle accept logic here
-    console.log("Signature accepted:", signature);
-  }, [signature]);
+    setShowToast(true);
+    onAccept();
+  }, [onAccept]);
+
+  if (showToast) {
+    return <ToastPage />;
+  }
 
   return (
     <div className="space-y-6">
@@ -41,4 +51,4 @@ export function SignatureStep() {
       </Button>
     </div>
   );
-}
+};
