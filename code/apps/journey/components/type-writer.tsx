@@ -47,7 +47,7 @@ export function TypeWriter({ text, children, isSelected }: TypeWriterProps) {
     <div className="flex flex-col items-start gap-6">
       {isSelected && (
         <Typewriter
-          options={{ delay: 20 }}
+          options={{ delay: 10 }}
           onInit={(typewriter) => {
             typewriter
               .typeString(text)
@@ -62,6 +62,7 @@ export function TypeWriter({ text, children, isSelected }: TypeWriterProps) {
       <AnimatePresence>
         {(showContent || !isSelected) && (
           <motion.div
+            className="w-full"
             variants={containerVariants}
             initial="hidden"
             animate="visible"

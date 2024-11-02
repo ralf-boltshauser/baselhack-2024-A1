@@ -117,17 +117,6 @@ async function calculateScore(customerId: number) {
     (multipliers.find((m) => m.attribute == AttributeName.HYPERTENSION)
       ?.multiplier ?? 0);
 
-  console.log(
-    ageScore,
-    bmiScore,
-    smokingScore,
-    insuranceSumScore,
-    durationScore,
-    cardiacIssuesScore,
-    diabeticConditionScore,
-    hypertensionScore,
-  );
-
   return (
     ageScore +
     bmiScore +
@@ -146,7 +135,6 @@ async function calculateTrafficLight(score: number) {
       createdAt: "desc",
     },
   });
-  console.log(score);
   if (!thresholds) {
     return TrafficLightColor.red;
   }
@@ -195,7 +183,6 @@ async function getStatus(trafficLight: TrafficLightColor, customerId: number) {
 
 export async function finalSubmission(customerId: number) {
   const score = await calculateScore(customerId);
-  console.log(score);
   const trafficLight = await calculateTrafficLight(score);
   const status = await getStatus(trafficLight, customerId);
 

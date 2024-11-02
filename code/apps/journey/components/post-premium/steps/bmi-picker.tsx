@@ -80,8 +80,6 @@ export default function BmiPicker({
     }
   };
 
-  console.log(onUpdate);
-  console.log(stepProperties);
   return (
     <div>
       <TypeWriter

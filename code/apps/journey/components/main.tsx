@@ -46,9 +46,7 @@ export default function Main({ elements: initialElements }: MainProps) {
     queryKey: ["customer"],
     // queryFn: () => createCustomer(),
     queryFn: async () => {
-      console.log("queryFn");
       const res = await createCustomer();
-      console.log("res", res);
       return res;
     },
     enabled: false, // This prevents the query from running automatically on mount
