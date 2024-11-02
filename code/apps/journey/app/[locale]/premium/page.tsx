@@ -15,6 +15,54 @@ import { getCustomer } from "~/components/pre-premium/actions";
 import { Customer } from "@repo/db";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
+import { cn } from "@repo/ui/lib/utils";
+
+function PriceComparison({
+  name,
+  barPercentage,
+  price,
+}: {
+  name: string;
+  barPercentage: number;
+  price: number;
+}) {
+  const isPax = name === "Pax";
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, x: -50 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
+      className="grid grid-cols-10 gap-x-2 gap-y-1 w-full"
+    >
+      <div className="col-span-3">
+        <p
+          className={cn(
+            isPax ? "text-black font-semibold" : "text-muted-foreground",
+          )}
+        >
+          {name}
+        </p>
+      </div>
+      <div className="my-auto col-span-4">
+        <motion.div
+          initial={{ width: "0%" }}
+          animate={{ width: `${barPercentage}%` }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className={cn(
+            "bg-gray-300 h-2 my-auto rounded-sm",
+            isPax && "bg-primary",
+          )}
+        />
+      </div>
+      <div className="col-span-3">
+        <p className="text-muted-foreground text-sm text-right">
+          CHF {price.toFixed(2)} / Month
+        </p>
+      </div>
+    </motion.div>
+  );
+}
 
 export default function Component() {
   const [mounted, setMounted] = useState(false);
@@ -75,7 +123,7 @@ export default function Component() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.6 }}
-      className="max-w-md mx-auto p-4 space-y-6 mt-10"
+      className="max-w-xl mx-auto p-4 space-y-6 mt-10"
     >
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -168,6 +216,56 @@ export default function Component() {
             </div>
           </CardContent>
         </Card>
+      </motion.div>
+
+      <motion.p
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.5, duration: 0.5, ease: "easeOut" }}
+        className="font-bold"
+      >
+        Price comparison
+      </motion.p>
+      <motion.p
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.55, duration: 0.5, ease: "easeOut" }}
+        className="!mt-2"
+      >
+        We did the research for you! Here's a quick and easy comparison of our
+        rates with some of our top competitors:
+      </motion.p>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.6, duration: 0.6, ease: "easeOut" }}
+        className="flex flex-col gap-y-1"
+      >
+        <PriceComparison
+          name="Pax"
+          barPercentage={45}
+          price={monthlyPrice || 0}
+        />
+        <PriceComparison
+          name="Smile.life"
+          barPercentage={62}
+          price={monthlyPrice ? monthlyPrice * 1.2 : 0}
+        />
+        <PriceComparison
+          name="Swiss Life"
+          barPercentage={74}
+          price={monthlyPrice ? monthlyPrice * 1.3 : 0}
+        />
+        <PriceComparison
+          name="Helvetia"
+          barPercentage={86}
+          price={monthlyPrice ? monthlyPrice * 1.45 : 0}
+        />
+        <PriceComparison
+          name="Bâloise"
+          barPercentage={100}
+          price={monthlyPrice ? monthlyPrice * 1.9 : 0}
+        />
       </motion.div>
 
       <motion.div
