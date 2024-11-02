@@ -9,7 +9,7 @@ export default async function ConfigurationPage() {
     currentWeights.data === null ||
     currentWeights.data === undefined
   ) {
-    throw new Error("No configurations found");
+    return <div>No configurations found</div>;
   }
 
   return (

@@ -5,6 +5,8 @@ import ConfigurationChart from "./configurationChart";
 import { Button } from "@repo/ui/components/ui/button";
 import { AttributeMultiplier, AttributeName } from "@repo/db";
 import { useState } from "react";
+import { useAction } from "next-safe-action/hooks";
+import { updateAttributeMultipliers } from "../actions/update-attribute-multipliers";
 
 function QuestionWeight({
   question,
@@ -13,12 +15,19 @@ function QuestionWeight({
 }: {
   question: string;
   value: number;
+  // eslint-disable-next-line no-unused-vars
   onChange: (e: any) => void;
 }) {
   return (
     <div className="flex flex-col items-start justify-between gap-1">
       <p>{question}</p>
-      <Input type="number" className="w-24" value={value} onChange={onChange} />
+      <Input
+        step={0.1}
+        type="number"
+        className="w-24"
+        value={value}
+        onChange={onChange}
+      />
     </div>
   );
 }
@@ -27,12 +36,48 @@ const findWeight = (weights: AttributeMultiplier[], name: AttributeName) => {
   return weights.find((weight) => weight.attribute === name);
 };
 
+const questions = [
+  {
+    attribute: AttributeName.SMOKING,
+    question: "Are you smoking ?",
+  },
+  {
+    attribute: AttributeName.AGE,
+    question: "How hold are you ?",
+  },
+  {
+    attribute: AttributeName.BMI,
+    question: "What's your BMI ?",
+  },
+  {
+    attribute: AttributeName.DURATION,
+    question: "How long the death insurance lasts ?",
+  },
+  {
+    attribute: AttributeName.INSURANCE_SUM,
+    question: "How much the insurance sum is ?",
+  },
+  {
+    attribute: AttributeName.CARDIAC_ISSUES,
+    question: "Have you had cardiac issues ?",
+  },
+  {
+    attribute: AttributeName.DIABETIC_CONDITION,
+    question: "Are you diabetic ?",
+  },
+  {
+    attribute: AttributeName.HYPERTENSION,
+    question: "Do you suffer from hypertension ?",
+  },
+];
+
 export default function ConfigurationForm({
   currentWeights,
 }: {
   currentWeights: AttributeMultiplier[];
 }) {
   const [weights, setWeights] = useState<AttributeMultiplier[]>(currentWeights);
+  const { execute, isExecuting } = useAction(updateAttributeMultipliers);
 
   return (
     <div className="grid grid-cols-2">
@@ -44,59 +89,41 @@ export default function ConfigurationForm({
           </p>
         </div>
         <div className="flex flex-col gap-y-4">
-          {/* <QuestionWeight
-            question="Are you smoking ?"
-            value={findWeight(weights, AttributeName.SMOKING)
-            onChange={(e) =>
-              setWeights({ ...weights, SMOKING: e.target.value })
+          {questions.map(({ attribute, question }) => {
+            const weight = findWeight(weights, attribute);
+            return (
+              <QuestionWeight
+                key={attribute}
+                question={question}
+                value={weight?.multiplier || 0}
+                onChange={(e) => {
+                  const newWeights = weights.map((w) => {
+                    if (w.attribute === attribute) {
+                      return {
+                        ...w,
+                        multiplier: parseFloat(e.target.value),
+                      };
+                    }
+                    return w;
+                  });
+                  setWeights(newWeights);
+                }}
+              />
+            );
+          })}
+          <Button
+            variant="default"
+            className="w-52"
+            disabled={isExecuting}
+            onClick={() =>
+              execute({
+                multipliers: weights.map((w) => ({
+                  attribute: w.attribute,
+                  multiplier: w.multiplier,
+                })),
+              })
             }
-          />
-          <QuestionWeight
-            question="How hold are you ?"
-            value={weights.AGE}
-            onChange={(e) => setWeights({ ...weights, AGE: e.target.value })}
-          />
-          <QuestionWeight
-            question="What's your BMI ?"
-            value={weights.BMI}
-            onChange={(e) => setWeights({ ...weights, BMI: e.target.value })}
-          />
-          <QuestionWeight
-            question="How long the death insurance lasts ?"
-            value={weights.DURATION}
-            onChange={(e) =>
-              setWeights({ ...weights, DURATION: e.target.value })
-            }
-          />
-          <QuestionWeight
-            question="How much the insurance sum is ?"
-            value={weights.INSURANCE_SUM}
-            onChange={(e) =>
-              setWeights({ ...weights, INSURANCE_SUM: e.target.value })
-            }
-          />
-          <QuestionWeight
-            question="Have you had cardiac issues ?"
-            value={weights.CARDIAC_ISSUES}
-            onChange={(e) =>
-              setWeights({ ...weights, CARDIAC_ISSUES: e.target.value })
-            }
-          />
-          <QuestionWeight
-            question="Are you diabetic ?"
-            value={weights.DIABETIC_CONDITION}
-            onChange={(e) =>
-              setWeights({ ...weights, DIABETIC_CONDITION: e.target.value })
-            }
-          />
-          <QuestionWeight
-            question="Do you suffer from hypertension ?"
-            value={weights.HYPERTENSION}
-            onChange={(e) =>
-              setWeights({ ...weights, HYPERTENSION: e.target.value })
-            }
-          /> */}
-          <Button variant="default" className="w-52">
+          >
             Save and apply
           </Button>
         </div>
@@ -108,7 +135,12 @@ export default function ConfigurationForm({
             This chart shows the risk appetite of your insurance pool.
           </p>
         </div>
-        <ConfigurationChart chartData={[]} />
+        <ConfigurationChart
+          chartData={weights.map((w) => ({
+            key: w.attribute,
+            weight: w.multiplier,
+          }))}
+        />
       </div>
     </div>
   );
