@@ -97,8 +97,6 @@ const activeLeadStatuses: Status[] = [
 export default async function LeadsPage() {
   const leads = await getAllLeads();
 
-  console.log("leads", leads);
-
   if (!leads || leads.data === null || leads.data === undefined) {
     throw new Error("No leads found");
   }

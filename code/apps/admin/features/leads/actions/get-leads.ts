@@ -13,10 +13,8 @@ export const getMyLeads = authActionClient
   .action(
     async ({
       parsedInput: { status = Status.waiting_for_approval },
-      ctx: { user, clerkUser },
+      ctx: { user },
     }) => {
-      console.log(user, clerkUser);
-
       return prisma.customer.findMany({
         where: {
           status: {

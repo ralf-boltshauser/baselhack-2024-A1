@@ -3,12 +3,7 @@
 import { Gender, prisma } from "@repo/db";
 
 export async function createCustomer() {
-  const customer = await prisma.customer.create({});
-
-  console.log(customer);
-
-  console.log("customers", await prisma.customer.findMany());
-  return customer;
+  return await prisma.customer.create({});
 }
 
 export async function updateGender(customerId: number, gender: Gender) {
