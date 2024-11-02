@@ -32,24 +32,29 @@ export default function DurationPicker({
   return (
     <div className="space-y-6 w-full max-w-md">
       <p className="text-lg font-medium">How long do you need coverage?</p>
+      <div>
+        <div className="flex gap-2 flex-wrap">
+          {durations.map((duration) => (
+            <Button
+              key={duration}
+              variant={selectedDuration === duration ? "default" : "outline"}
+              onClick={async () => {
+                setSelectedDuration(duration);
+                if (!customerId) return;
+                await updateDuration(customerId, duration);
+                onUpdate({ duration });
+                router.push("/premium");
+              }}
+              className="flex-1 min-w-[4rem]"
+            >
+              {`${duration} years`}
+            </Button>
+          ))}
+        </div>
 
-      <div className="flex gap-2 flex-wrap">
-        {durations.map((duration) => (
-          <Button
-            key={duration}
-            variant={selectedDuration === duration ? "default" : "outline"}
-            onClick={async () => {
-              setSelectedDuration(duration);
-              if (!customerId) return;
-              await updateDuration(customerId, duration);
-              onUpdate({ duration });
-              router.push("/premium");
-            }}
-            className="flex-1 min-w-[4rem]"
-          >
-            {`${duration} years`}
-          </Button>
-        ))}
+        <span className="text-gray-500 underline text-sm cursor-pointer pt-2 block">
+          What term makes sense for me?
+        </span>
       </div>
     </div>
   );

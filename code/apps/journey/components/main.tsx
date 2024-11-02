@@ -61,7 +61,7 @@ export default function Main({ elements: initialElements }: MainProps) {
 
   function adjustHeight() {
     if (divRef.current) {
-      setHeight((divRef.current as HTMLDivElement).offsetHeight);
+      setHeight((divRef.current as HTMLDivElement).offsetHeight + 32);
     }
   }
   useEffect(() => {
@@ -74,20 +74,16 @@ export default function Main({ elements: initialElements }: MainProps) {
   const setLoaded = useStore((state) => state.setLoaded);
   useEffect(() => {
     if (!customerId && loaded) {
-      console.log("Triggering customer creation", { customerId, loaded });
       refetch();
-      console.log("refetched");
     }
   }, [customerId, loaded]);
 
   useEffect(() => {
-    console.log("Setting loaded to true");
     setLoaded(true);
   }, []);
 
   useEffect(() => {
     if (data) {
-      console.log("Customer created:", data);
       setCustomerId(Number(data.id));
     }
   }, [data]);
@@ -159,13 +155,13 @@ export default function Main({ elements: initialElements }: MainProps) {
   return (
     <div className="flex mt-64">
       <Avatar className="w-12 h-12" onClick={() => setStep(step + 1)}>
-        <AvatarImage src="/placeholder.svg?height=48&width=48" alt="Mia" />
+        <AvatarImage src="/icons/mia.png" alt="Mia" />
         <AvatarFallback>Mia</AvatarFallback>
       </Avatar>
-      <div>
+      <div className="pt-4">
         <motion.div
           style={{ position: "relative", top: `-${height}px` }}
-          className="flex flex-col gap-4 -mt-8 ml-5"
+          className="flex flex-col gap-12 -mt-8 ml-5"
           animate={{
             y: isScrollingUp ? [0, -20, 0] : 0,
           }}
