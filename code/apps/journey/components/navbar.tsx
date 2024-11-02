@@ -62,7 +62,7 @@ export default function Navbar() {
         </div>
       </div>
       <motion.div
-        className="absolute bottom-0 left-0 h-[2px] bg-black"
+        className="absolute bottom-0 left-0 h-[2px] bg-[#3B3A53]"
         animate={{ width: `${loadingBarWidth}%` }}
         transition={{ duration: 0.5, ease: "easeInOut" }}
       ></motion.div>

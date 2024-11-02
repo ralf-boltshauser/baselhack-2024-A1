@@ -2,6 +2,7 @@ import "@repo/ui/globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { NuqsAdapter } from "nuqs/adapters/next";
+import FAB from "~/components/fab";
 import Navbar from "~/components/navbar";
 import Providers from "~/components/providers";
 import { I18nProviderClient } from "~/locales/client";
@@ -29,6 +30,7 @@ export default function RootLayout({
             <Providers>
               <Navbar />
               <div className="mx-auto max-w-3xl px-5">{children}</div>
+              <FAB />
             </Providers>
           </NuqsAdapter>
         </I18nProviderClient>
