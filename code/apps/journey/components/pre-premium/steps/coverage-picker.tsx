@@ -8,11 +8,30 @@ import { useState } from "react";
 import useStore from "~/store";
 import { updateCoverageAmount } from "../actions";
 
-export default function CoveragePicker() {
+type CoverageProperties = {
+  coverage: number;
+};
+
+interface CoveragePickerProps {
+  stepProperties?: CoverageProperties;
+  onUpdate: (properties: Partial<CoverageProperties>) => void;
+}
+
+const DEFAULT_COVERAGE = 100000;
+
+export default function CoveragePicker({
+  stepProperties,
+  onUpdate,
+}: CoveragePickerProps) {
   const [step, setStep] = useQueryState("step", parseAsInteger.withDefault(0));
   const customerId = useStore((state) => state.customerId);
-  const [coverage, setCoverage] = useState(100000);
-  const [inputValue, setInputValue] = useState("100,000");
+
+  const initialCoverage = stepProperties?.coverage ?? DEFAULT_COVERAGE;
+
+  const [coverage, setCoverage] = useState(initialCoverage);
+  const [inputValue, setInputValue] = useState(
+    initialCoverage.toLocaleString(),
+  );
 
   const MIN_COVERAGE = 10000;
   const MAX_COVERAGE = 2000000;
@@ -22,7 +41,7 @@ export default function CoveragePicker() {
   };
 
   const handleInputBlur = () => {
-    const value = parseInt(inputValue.replace(/\D/g, ''));
+    const value = parseInt(inputValue.replace(/\D/g, ""));
     if (isNaN(value)) {
       setInputValue(coverage.toLocaleString());
       return;
@@ -43,11 +62,12 @@ export default function CoveragePicker() {
   const handleSubmit = async () => {
     if (!customerId) return;
     await updateCoverageAmount(customerId, coverage);
+    onUpdate({ coverage });
     setStep(step + 1);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       e.currentTarget.blur(); // This will trigger the handleInputBlur
     }
   };
@@ -55,7 +75,7 @@ export default function CoveragePicker() {
   return (
     <div className="space-y-6 w-full max-w-md">
       <p className="text-lg font-medium">How much coverage do you need?</p>
-      
+
       <div className="space-y-4">
         <Input
           type="text"
@@ -65,7 +85,7 @@ export default function CoveragePicker() {
           onKeyDown={handleKeyDown}
           className="text-right"
         />
-        
+
         <div className="w-full">
           <Slider
             value={[coverage]}
@@ -81,10 +101,7 @@ export default function CoveragePicker() {
         </div>
       </div>
 
-      <Button 
-        onClick={handleSubmit}
-        className="w-full"
-      >
+      <Button onClick={handleSubmit} className="w-full">
         Continue
       </Button>
     </div>

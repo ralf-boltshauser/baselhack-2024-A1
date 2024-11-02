@@ -21,10 +21,26 @@ import {
   SelectValue,
 } from "@repo/ui/components/ui/select";
 
-export default function BirthdayPicker() {
+type BirthdayProperties = {
+  birthday: Date | null;
+};
+
+interface BirthdayPickerProps {
+  stepProperties: BirthdayProperties;
+  onUpdate: (properties: Partial<BirthdayProperties>) => void;
+}
+
+export default function BirthdayPicker({
+  stepProperties = {
+    birthday: null,
+  },
+  onUpdate,
+}: BirthdayPickerProps) {
   const [step, setStep] = useQueryState("step", parseAsInteger.withDefault(0));
   const customerId = useStore((state) => state.customerId);
-  const [date, setDate] = useState<Date | undefined>(undefined);
+  const [date, setDate] = useState<Date | undefined>(
+    stepProperties.birthday ?? undefined,
+  );
   const [open, setOpen] = useState(false);
   const [month, setMonth] = useState<Date>(new Date(2000, 0));
 
@@ -36,9 +52,10 @@ export default function BirthdayPicker() {
       setOpen(false);
 
       await updateBirthday(customerId, selectedDate);
+      onUpdate({ birthday: selectedDate });
       setStep(step + 1);
     } catch (error) {
-      console.error('Failed to update birthday:', error);
+      console.error("Failed to update birthday:", error);
       setDate(undefined);
     }
   };
@@ -55,12 +72,18 @@ export default function BirthdayPicker() {
             variant="outline"
             className={cn(
               "w-full justify-start text-left font-normal h-14 px-4",
-              !date && "text-muted-foreground hover:text-primary"
+              !date && "text-muted-foreground hover:text-primary",
             )}
           >
             <CalendarIcon className="mr-3 h-5 w-5 opacity-70" />
             {date ? (
-              <span className="font-medium">{date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
+              <span className="font-medium">
+                {date.toLocaleDateString("en-US", {
+                  month: "long",
+                  day: "numeric",
+                  year: "numeric",
+                })}
+              </span>
             ) : (
               <span>Select your birth date</span>
             )}
@@ -85,7 +108,7 @@ export default function BirthdayPicker() {
               <SelectContent>
                 {Array.from(
                   { length: new Date().getFullYear() - 1900 + 1 },
-                  (_, i) => new Date().getFullYear() - i
+                  (_, i) => new Date().getFullYear() - i,
                 ).map((year) => (
                   <SelectItem key={year} value={year.toString()}>
                     {year}

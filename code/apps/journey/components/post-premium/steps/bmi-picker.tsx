@@ -7,12 +7,36 @@ import useStore from "~/store";
 import { updateBmi } from "../actions";
 import { Button } from "@repo/ui/components/ui/button";
 
-export default function BmiPicker() {
+type BmiStepProperties = {
+  height: number | null;
+  weight: number | null;
+  bmi: number | null;
+};
+
+interface BmiPickerProps {
+  stepProperties: BmiStepProperties;
+  onUpdate: (properties: Partial<BmiStepProperties>) => void;
+}
+
+export default function BmiPicker({
+  stepProperties = {
+    height: null,
+    weight: null,
+    bmi: null,
+  },
+  onUpdate,
+}: BmiPickerProps) {
   const [step, setStep] = useQueryState("step", parseAsInteger.withDefault(0));
   const customerId = useStore((state) => state.customerId);
-  const [height, setHeight] = React.useState<string>("");
-  const [weight, setWeight] = React.useState<string>("");
-  const [bmi, setBmi] = React.useState<number | null>(null);
+  const [height, setHeight] = React.useState<string>(
+    stepProperties.height ? stepProperties.height.toString() : "",
+  );
+  const [weight, setWeight] = React.useState<string>(
+    stepProperties.weight ? stepProperties.weight.toString() : "",
+  );
+  const [bmi, setBmi] = React.useState<number | null>(
+    stepProperties.bmi ? stepProperties.bmi : null,
+  );
 
   const calculateBMI = (height: string, weight: string) => {
     const heightInM = parseFloat(height) / 100;
@@ -53,6 +77,8 @@ export default function BmiPicker() {
     }
   };
 
+  console.log(onUpdate);
+  console.log(stepProperties);
   return (
     <div>
       <p>
@@ -68,6 +94,7 @@ export default function BmiPicker() {
             className="w-full text-lg h-14"
             style={{ WebkitAppearance: "none", MozAppearance: "textfield" }}
             onChange={(e) => handleHeightChange(e.target.value)}
+            value={height}
           />
           <Input
             type="number"
@@ -75,6 +102,7 @@ export default function BmiPicker() {
             className="w-full text-lg h-14"
             style={{ WebkitAppearance: "none", MozAppearance: "textfield" }}
             onChange={(e) => handleWeightChange(e.target.value)}
+            value={weight}
           />
         </div>
         <div className="mt-4">
@@ -84,6 +112,11 @@ export default function BmiPicker() {
             onClick={async () => {
               if (!customerId || !bmi) return;
               await updateBmi(customerId, bmi);
+              onUpdate({
+                height: parseFloat(height),
+                weight: parseFloat(weight),
+                bmi: bmi,
+              });
               setStep(step + 1);
             }}
           >

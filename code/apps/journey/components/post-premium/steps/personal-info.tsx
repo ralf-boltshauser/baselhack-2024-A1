@@ -9,21 +9,56 @@ import AddressSearch from "~/components/address-search";
 import { PhoneInput } from "~/components/phone-input";
 import { updatePersonalInfo } from "../actions";
 
-export default function PersonalInfo() {
+type PersonalInfoProperties = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  address: string;
+};
+
+interface PersonalInfoProps {
+  stepProperties: PersonalInfoProperties;
+  onUpdate: (properties: Partial<PersonalInfoProperties>) => void;
+}
+
+export default function PersonalInfo({
+  stepProperties = {
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    address: "",
+  },
+  onUpdate,
+}: PersonalInfoProps) {
   const [step, setStep] = useQueryState("step", parseAsInteger.withDefault(0));
   const customerId = useStore((state) => state.customerId);
 
-  const [firstName, setFirstName] = React.useState("");
-  const [lastName, setLastName] = React.useState("");
-  const [email, setEmail] = React.useState("");
-  const [phone, setPhone] = React.useState("");
-  const [address, setAddress] = React.useState("");
+  const [firstName, setFirstName] = React.useState<string>(
+    stepProperties.firstName || "",
+  );
+  const [lastName, setLastName] = React.useState<string>(
+    stepProperties.lastName || "",
+  );
+  const [email, setEmail] = React.useState<string>(stepProperties.email || "");
+  const [phone, setPhone] = React.useState<string>(stepProperties.phone || "");
+  const [address, setAddress] = React.useState<string>(
+    stepProperties.address || "",
+  );
 
   const handleSubmit = async () => {
     if (!customerId) return;
     if (!firstName || !lastName || !email || !phone || !address) return;
 
     await updatePersonalInfo(customerId, firstName, lastName, address, email);
+    onUpdate({
+      firstName,
+      lastName,
+      email,
+      phone,
+      address,
+    });
     setStep(step + 1);
   };
 

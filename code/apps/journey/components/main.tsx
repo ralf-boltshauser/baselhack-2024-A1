@@ -11,13 +11,38 @@ import { parseAsInteger, useQueryState } from "nuqs";
 import { useEffect, useRef, useState } from "react";
 import useStore from "~/store";
 import { createCustomer } from "./actions";
+import { createPortal } from "react-dom";
+import React from "react";
 
-export default function Main({
-  elements,
-}: {
-  elements: Array<{ key: string; component: React.ReactNode }>;
-}) {
+type ElementConfig<T = Record<string, unknown>> = {
+  key: string;
+  component: React.ReactElement;
+  stepProperties: T;
+};
+
+// Update the props type
+interface MainProps {
+  elements: ElementConfig[];
+}
+
+export default function Main({ elements: initialElements }: MainProps) {
+  const [elements, setElements] = useState(initialElements);
   const [step, setStep] = useQueryState("step", parseAsInteger.withDefault(0));
+  const [isScrollingUp, setIsScrollingUp] = useState(false);
+  const stepRef = useRef(step); // Store current step in ref to access in wheel handler
+
+  const updateStepProperties = (key: string, newProperties: any) => {
+    setElements((prevElements) =>
+      prevElements.map((element) =>
+        element.key === key
+          ? {
+              ...element,
+              stepProperties: { ...element.stepProperties, ...newProperties },
+            }
+          : element,
+      ),
+    );
+  };
 
   const { data, refetch } = useQuery({
     queryKey: ["customer"],
@@ -74,11 +99,59 @@ export default function Main({
       }, 3000);
     }
   }, [step]);
+
+  // Add refs to store wheel-related values
+  const wheelDeltaRef = useRef(0);
+  const lastWheelTimeRef = useRef(Date.now());
+
+  // Update ref when step changes
+  useEffect(() => {
+    stepRef.current = step;
+  }, [step]);
+
+  // Add wheel event handling once
+  useEffect(() => {
+    const wheelThreshold = 50; // Milliseconds between wheel events
+    const handleWheel = (event: WheelEvent) => {
+      const currentTime = Date.now();
+
+      // Reset wheel delta if enough time has passed
+      if (currentTime - lastWheelTimeRef.current > wheelThreshold) {
+        wheelDeltaRef.current = 0;
+      }
+
+      // Accumulate wheel delta
+      wheelDeltaRef.current += event.deltaY;
+      lastWheelTimeRef.current = currentTime;
+
+      // If scrolling up (negative deltaY) and past threshold
+      if (wheelDeltaRef.current < -100) {
+        // Only move back one step and prevent multiple triggers
+        if (stepRef.current > 0 && !isScrollingUp) {
+          setIsScrollingUp(true);
+          setStep(stepRef.current - 1);
+
+          // Reset scroll state after animation
+          setTimeout(() => {
+            setIsScrollingUp(false);
+          }, 500); // Match this with your animation duration
+
+          wheelDeltaRef.current = 0;
+        }
+      }
+    };
+
+    window.addEventListener("wheel", handleWheel, { passive: true });
+
+    return () => {
+      window.removeEventListener("wheel", handleWheel);
+    };
+  }, []);
+
   const handleRefAssignement = (el: HTMLDivElement | null) => {
     divRef.current = el;
     adjustHeight();
   };
-
   if (!customerId) {
     return <div>Loading...</div>;
   }
@@ -93,39 +166,42 @@ export default function Main({
         <motion.div
           style={{ position: "relative", top: `-${height}px` }}
           className="flex flex-col gap-4 -mt-8 ml-5"
+          animate={{
+            y: isScrollingUp ? [0, -20, 0] : 0,
+          }}
+          transition={{
+            duration: 0.5,
+            ease: "easeInOut",
+          }}
         >
           <motion.div
             layoutId="container"
             ref={handleRefAssignement}
-            className="relative mt-3 flex flex-col gap-4"
+            className="relative mt-3 flex flex-col gap-4 pointer-events-none"
           >
             {elements.slice(0, step).map((e) => (
               <motion.div
                 key={e.key}
                 layoutId={e.key}
-                initial={{ opacity: 1 }}
-                animate={{
-                  opacity: 0.5,
-                  transition: { delay: 0.3, duration: 0.5 },
-                }}
-                exit={{ opacity: 0 }}
+                className="pointer-events-none opacity-50"
               >
-                {e.component}
+                {React.cloneElement(e.component, {
+                  stepProperties: e.stepProperties,
+                  onUpdate: (newProperties: any) =>
+                    updateStepProperties(e.key, newProperties),
+                })}
               </motion.div>
             ))}
           </motion.div>
           <div className="flex flex-col gap-4">
             <AnimatePresence mode="wait">
               {elements.slice(step, step + 1).map((e) => (
-                <motion.div
-                  key={e.key}
-                  layoutId={e.key}
-                  style={{ zIndex: 1 }}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                >
-                  {e.component}
+                <motion.div key={e.key} layoutId={e.key}>
+                  {React.cloneElement(e.component, {
+                    stepProperties: e.stepProperties,
+                    onUpdate: (newProperties: any) =>
+                      updateStepProperties(e.key, newProperties),
+                  })}
                 </motion.div>
               ))}
             </AnimatePresence>
