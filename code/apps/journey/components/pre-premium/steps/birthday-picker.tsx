@@ -21,10 +21,26 @@ import {
   SelectValue,
 } from "@repo/ui/components/ui/select";
 
-export default function BirthdayPicker() {
+type BirthdayProperties = {
+  birthday: Date | null;
+};
+
+interface BirthdayPickerProps {
+  stepProperties: BirthdayProperties;
+  onUpdate: (properties: Partial<BirthdayProperties>) => void;
+}
+
+export default function BirthdayPicker({
+  stepProperties = {
+    birthday: null,
+  },
+  onUpdate,
+}: BirthdayPickerProps) {
   const [step, setStep] = useQueryState("step", parseAsInteger.withDefault(0));
   const customerId = useStore((state) => state.customerId);
-  const [date, setDate] = useState<Date | undefined>(undefined);
+  const [date, setDate] = useState<Date | undefined>(
+    stepProperties.birthday ?? undefined,
+  );
   const [open, setOpen] = useState(false);
   const [month, setMonth] = useState<Date>(new Date(2000, 0));
 
@@ -36,6 +52,7 @@ export default function BirthdayPicker() {
       setOpen(false);
 
       await updateBirthday(customerId, selectedDate);
+      onUpdate({ birthday: selectedDate });
       setStep(step + 1);
     } catch (error) {
       console.error("Failed to update birthday:", error);

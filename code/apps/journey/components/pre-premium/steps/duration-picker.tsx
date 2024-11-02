@@ -6,9 +6,25 @@ import useStore from "~/store";
 import { updateDuration } from "../actions";
 import { useRouter } from "next/navigation";
 
-export default function DurationPicker() {
+type DurationProperties = {
+  duration: number | null;
+};
+
+interface DurationPickerProps {
+  stepProperties: DurationProperties;
+  onUpdate: (properties: Partial<DurationProperties>) => void;
+}
+
+export default function DurationPicker({
+  stepProperties = {
+    duration: null,
+  },
+  onUpdate,
+}: DurationPickerProps) {
   const customerId = useStore((state) => state.customerId);
-  const [selectedDuration, setSelectedDuration] = useState<number | null>(null);
+  const [selectedDuration, setSelectedDuration] = useState<number | null>(
+    stepProperties.duration,
+  );
   const router = useRouter();
 
   const durations = [5, 10, 15, 20] as const;
@@ -26,6 +42,7 @@ export default function DurationPicker() {
                 setSelectedDuration(duration);
                 if (!customerId) return;
                 await updateDuration(customerId, duration);
+                onUpdate({ duration });
                 router.push("/premium");
               }}
               className="flex-1 min-w-[4rem]"

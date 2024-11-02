@@ -8,11 +8,30 @@ import { useState } from "react";
 import useStore from "~/store";
 import { updateCoverageAmount } from "../actions";
 
-export default function CoveragePicker() {
+type CoverageProperties = {
+  coverage: number;
+};
+
+interface CoveragePickerProps {
+  stepProperties?: CoverageProperties;
+  onUpdate: (properties: Partial<CoverageProperties>) => void;
+}
+
+const DEFAULT_COVERAGE = 100000;
+
+export default function CoveragePicker({
+  stepProperties,
+  onUpdate,
+}: CoveragePickerProps) {
   const [step, setStep] = useQueryState("step", parseAsInteger.withDefault(0));
   const customerId = useStore((state) => state.customerId);
-  const [coverage, setCoverage] = useState(100000);
-  const [inputValue, setInputValue] = useState("100,000");
+
+  const initialCoverage = stepProperties?.coverage ?? DEFAULT_COVERAGE;
+
+  const [coverage, setCoverage] = useState(initialCoverage);
+  const [inputValue, setInputValue] = useState(
+    initialCoverage.toLocaleString(),
+  );
 
   const MIN_COVERAGE = 10000;
   const MAX_COVERAGE = 2000000;
@@ -43,6 +62,7 @@ export default function CoveragePicker() {
   const handleSubmit = async () => {
     if (!customerId) return;
     await updateCoverageAmount(customerId, coverage);
+    onUpdate({ coverage });
     setStep(step + 1);
   };
 

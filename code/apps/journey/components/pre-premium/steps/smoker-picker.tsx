@@ -6,13 +6,28 @@ import useStore from "~/store";
 import { updateSmokerStatus } from "../actions";
 import Image from "next/image";
 
-export default function SmokerPicker() {
+type SmokerProperties = {
+  isSmoker: boolean | null;
+};
+
+interface SmokerPickerProps {
+  stepProperties: SmokerProperties;
+  onUpdate: (properties: Partial<SmokerProperties>) => void;
+}
+
+export default function SmokerPicker({
+  stepProperties = {
+    isSmoker: null,
+  },
+  onUpdate,
+}: SmokerPickerProps) {
   const [step, setStep] = useQueryState("step", parseAsInteger.withDefault(0));
   const customerId = useStore((state) => state.customerId);
 
   const handleClick = async (isSmoker: boolean) => {
     if (!customerId) return;
     await updateSmokerStatus(customerId, isSmoker);
+    onUpdate({ isSmoker });
     setStep(step + 1);
   };
 
@@ -23,7 +38,7 @@ export default function SmokerPicker() {
         <div className="flex gap-8">
           <Button
             onClick={() => handleClick(true)}
-            variant="ghost"
+            variant={stepProperties.isSmoker === true ? "default" : "ghost"}
             className="flex flex-col items-center w-24 h-24 p-4 hover:bg-gray-100 rounded-lg"
           >
             <Image
@@ -36,7 +51,7 @@ export default function SmokerPicker() {
           </Button>
           <Button
             onClick={() => handleClick(false)}
-            variant="ghost"
+            variant={stepProperties.isSmoker === false ? "default" : "ghost"}
             className="flex flex-col items-center w-24 h-24 p-4 hover:bg-gray-100 rounded-lg"
           >
             <Image

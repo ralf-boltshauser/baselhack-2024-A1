@@ -8,29 +8,64 @@ import useStore from "~/store";
 import { MedicalHistory } from "@repo/db";
 import { updateHealthQuestions } from "../actions";
 
-export default function HealthQuestions() {
+type HealthQuestionsProperties = {
+  hasChronicIllness: boolean | null;
+  hasHospitalization: boolean | null;
+  hasSeriousIllness: boolean | null;
+  hasPrescription: boolean | null;
+  chronicIllnessesInfo: string;
+  hospitalizationInfo: string;
+  seriousIllnessesInfo: string;
+  medicationInfo: string;
+};
+
+interface HealthQuestionsProps {
+  stepProperties: HealthQuestionsProperties;
+  onUpdate: (properties: Partial<HealthQuestionsProperties>) => void;
+}
+
+export default function HealthQuestions({
+  stepProperties = {
+    hasChronicIllness: null,
+    hasHospitalization: null,
+    hasSeriousIllness: null,
+    hasPrescription: null,
+    chronicIllnessesInfo: "",
+    hospitalizationInfo: "",
+    seriousIllnessesInfo: "",
+    medicationInfo: "",
+  },
+  onUpdate,
+}: HealthQuestionsProps) {
   const [step, setStep] = useQueryState("step", parseAsInteger.withDefault(0));
   const customerId = useStore((state) => state.customerId);
 
   const [hasChronicIllness, setHasChronicIllness] = React.useState<
     boolean | null
-  >(null);
+  >(stepProperties ? stepProperties.hasChronicIllness : null);
   const [hasHospitalization, setHasHospitalization] = React.useState<
     boolean | null
-  >(null);
+  >(stepProperties ? stepProperties.hasHospitalization : null);
   const [hasSeriousIllness, setHasSeriousIllness] = React.useState<
     boolean | null
-  >(null);
+  >(stepProperties ? stepProperties.hasSeriousIllness : null);
   const [hasPrescription, setHasPrescription] = React.useState<boolean | null>(
-    null,
+    stepProperties ? stepProperties.hasPrescription : null,
   );
   const [chronicIllnessesInfo, setChronicIllnessesInfo] =
-    React.useState<string>("");
-  const [hospitalizationInfo, setHospitalizationInfo] =
-    React.useState<string>("");
+    React.useState<string>(
+      stepProperties ? stepProperties.chronicIllnessesInfo : "",
+    );
+  const [hospitalizationInfo, setHospitalizationInfo] = React.useState<string>(
+    stepProperties ? stepProperties.hospitalizationInfo : "",
+  );
   const [seriousIllnessesInfo, setSeriousIllnessesInfo] =
-    React.useState<string>("");
-  const [medicationInfo, setMedicationInfo] = React.useState<string>("");
+    React.useState<string>(
+      stepProperties ? stepProperties.seriousIllnessesInfo : "",
+    );
+  const [medicationInfo, setMedicationInfo] = React.useState<string>(
+    stepProperties ? stepProperties.medicationInfo : "",
+  );
 
   const handleSelection = (
     setter: (value: boolean) => void,
@@ -40,9 +75,7 @@ export default function HealthQuestions() {
   };
 
   const handleSubmit = async () => {
-    console.log("customerId", customerId);
     if (!customerId) return;
-    console.log("here");
     if (
       hasChronicIllness === null ||
       hasHospitalization === null ||
@@ -51,14 +84,12 @@ export default function HealthQuestions() {
     )
       return;
 
-    console.log("here1");
     // Validate that info is not empty when condition is true
     if (hasChronicIllness && chronicIllnessesInfo === "") return;
     if (hasHospitalization && hospitalizationInfo === "") return;
     if (hasSeriousIllness && seriousIllnessesInfo === "") return;
     if (hasPrescription && medicationInfo === "") return;
 
-    console.log("here2");
     const medicalHistory: Omit<MedicalHistory, "id" | "customerId"> = {
       hasChronicIllnesses: hasChronicIllness ?? false,
       chronicIllnessesInfo: hasChronicIllness ? chronicIllnessesInfo : null,
@@ -69,8 +100,18 @@ export default function HealthQuestions() {
       takesMedication: hasPrescription ?? false,
       medicationInfo: hasPrescription ? medicationInfo : null,
     };
-    console.log("medicalHistory", medicalHistory);
+
     await updateHealthQuestions(customerId, medicalHistory);
+    onUpdate({
+      hasChronicIllness,
+      hasHospitalization,
+      hasSeriousIllness,
+      hasPrescription,
+      chronicIllnessesInfo,
+      hospitalizationInfo,
+      seriousIllnessesInfo,
+      medicationInfo,
+    });
     setStep(step + 1);
   };
 
