@@ -16,7 +16,9 @@
       "persistent": true
     },
     "db:generate": {
-      "cache": false
+      "cache": false,
+      "inputs": [".env*"],
+      "env": ["DATABASE_URL"]
     },
     "db:push": {
       "env": [
