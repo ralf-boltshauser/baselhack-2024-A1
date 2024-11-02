@@ -15,8 +15,8 @@ type GenderProperties = {
 };
 
 interface GenderPickerProps {
-  stepProperties: GenderProperties;
-  onUpdate: (properties: Partial<GenderProperties>) => void;
+  stepProperties?: GenderProperties;
+  onUpdate?: (properties: Partial<GenderProperties>) => void;
 }
 
 export default function GenderPicker({
@@ -35,7 +35,7 @@ export default function GenderPicker({
     if (!customerId) return;
     setSelectedGender(gender);
     await updateGender(customerId, gender);
-    onUpdate({
+    onUpdate?.({
       gender,
     });
     setStep(step + 1);
@@ -48,8 +48,8 @@ export default function GenderPicker({
         <div className="flex gap-8">
           <Button
             onClick={() => handleGenderSelect(Gender.male)}
-            variant="ghost"
-            className="flex flex-col items-center w-24 h-24 p-4 hover:bg-gray-100 rounded-lg"
+            variant={selectedGender === "male" ? "default" : "ghost"}
+            className="flex flex-col items-center w-24 h-24 p-4 rounded-lg"
           >
             <Image
               src="/icons/male.svg"
@@ -61,8 +61,8 @@ export default function GenderPicker({
           </Button>
           <Button
             onClick={() => handleGenderSelect(Gender.female)}
-            variant="ghost"
-            className="flex flex-col items-center w-24 h-24 p-4 hover:bg-gray-100 rounded-lg"
+            variant={selectedGender === "female" ? "default" : "ghost"}
+            className="flex flex-col items-center w-24 h-24 p-4 rounded-lg"
           >
             <Image
               src="/icons/female.svg"

@@ -14,7 +14,7 @@ type CoverageProperties = {
 
 interface CoveragePickerProps {
   stepProperties?: CoverageProperties;
-  onUpdate: (properties: Partial<CoverageProperties>) => void;
+  onUpdate?: (properties: Partial<CoverageProperties>) => void;
 }
 
 const DEFAULT_COVERAGE = 100000;
@@ -62,7 +62,7 @@ export default function CoveragePicker({
   const handleSubmit = async () => {
     if (!customerId) return;
     await updateCoverageAmount(customerId, coverage);
-    onUpdate({ coverage });
+    onUpdate?.({ coverage });
     setStep(step + 1);
   };
 
