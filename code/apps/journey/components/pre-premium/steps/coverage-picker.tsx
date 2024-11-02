@@ -76,34 +76,40 @@ export default function CoveragePicker({
     <div className="space-y-6 w-full max-w-md">
       <p className="text-lg font-medium">How much coverage do you need?</p>
 
-      <div className="space-y-4">
-        <Input
-          type="text"
-          value={inputValue}
-          onChange={handleInputChange}
-          onBlur={handleInputBlur}
-          onKeyDown={handleKeyDown}
-          className="text-right"
-        />
-
-        <div className="w-full">
-          <Slider
-            value={[coverage]}
-            min={MIN_COVERAGE}
-            max={MAX_COVERAGE}
-            step={10000}
-            onValueChange={handleSliderChange}
+      <div>
+        <div className="space-y-4">
+          <Input
+            type="text"
+            value={inputValue}
+            onChange={handleInputChange}
+            onBlur={handleInputBlur}
+            onKeyDown={handleKeyDown}
+            className="text-right"
           />
-          <div className="flex justify-between mt-2 text-sm text-gray-600">
-            <span>{MIN_COVERAGE.toLocaleString()}</span>
-            <span>{MAX_COVERAGE.toLocaleString()}</span>
+
+          <div className="w-full">
+            <Slider
+              value={[coverage]}
+              min={MIN_COVERAGE}
+              max={MAX_COVERAGE}
+              step={10000}
+              onValueChange={handleSliderChange}
+            />
+            <div className="flex justify-between mt-2 text-sm text-gray-600">
+              <span>{MIN_COVERAGE.toLocaleString()}CHF</span>
+              <span>{MAX_COVERAGE.toLocaleString()}CHF</span>
+            </div>
           </div>
         </div>
-      </div>
 
-      <Button onClick={handleSubmit} className="w-full">
-        Continue
-      </Button>
+        <Button onClick={handleSubmit} className="w-full">
+          Continue
+        </Button>
+
+        <span className="text-gray-500 underline text-sm cursor-pointer pt-2 block">
+          What insurance amount makes sense for me?
+        </span>
+      </div>
     </div>
   );
 }

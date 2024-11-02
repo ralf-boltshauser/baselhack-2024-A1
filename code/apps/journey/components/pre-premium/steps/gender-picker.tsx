@@ -44,28 +44,38 @@ export default function GenderPicker({
   return (
     <div className="flex flex-col items-start gap-6">
       <p className="text-xl font-medium">Which gender are you?</p>
-      <div className="flex gap-8">
-        <Button
-          onClick={() => handleGenderSelect("male")}
-          variant="ghost"
-          className="flex flex-col items-center w-24 h-24 p-4 hover:bg-gray-100 rounded-lg"
-        >
-          <Image src="/icons/male.svg" alt="Male icon" width={48} height={48} />
-          <span className="mt-2">Male</span>
-        </Button>
-        <Button
-          onClick={() => handleGenderSelect("female")}
-          variant="ghost"
-          className="flex flex-col items-center w-24 h-24 p-4 hover:bg-gray-100 rounded-lg"
-        >
-          <Image
-            src="/icons/female.svg"
-            alt="Female icon"
-            width={48}
-            height={48}
-          />
-          <span className="mt-2">Female</span>
-        </Button>
+      <div>
+        <div className="flex gap-8">
+          <Button
+            onClick={() => handleGenderSelect(Gender.male)}
+            variant="ghost"
+            className="flex flex-col items-center w-24 h-24 p-4 hover:bg-gray-100 rounded-lg"
+          >
+            <Image
+              src="/icons/male.svg"
+              alt="Male icon"
+              width={48}
+              height={48}
+            />
+            <span className="mt-2">Male</span>
+          </Button>
+          <Button
+            onClick={() => handleGenderSelect(Gender.female)}
+            variant="ghost"
+            className="flex flex-col items-center w-24 h-24 p-4 hover:bg-gray-100 rounded-lg"
+          >
+            <Image
+              src="/icons/female.svg"
+              alt="Female icon"
+              width={48}
+              height={48}
+            />
+            <span className="mt-2">Female</span>
+          </Button>
+        </div>
+        <span className="text-gray-500 underline text-sm cursor-pointer pt-2 block">
+          Why is this important?
+        </span>
       </div>
     </div>
   );

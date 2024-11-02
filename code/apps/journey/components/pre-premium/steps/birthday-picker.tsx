@@ -65,71 +65,76 @@ export default function BirthdayPicker({
       <div className="space-y-2">
         <h2 className="text-lg font-medium">When's your birthday?</h2>
       </div>
-
-      <Popover open={open} onOpenChange={setOpen}>
-        <PopoverTrigger asChild>
-          <Button
-            variant="outline"
-            className={cn(
-              "w-full justify-start text-left font-normal h-14 px-4",
-              !date && "text-muted-foreground hover:text-primary",
-            )}
-          >
-            <CalendarIcon className="mr-3 h-5 w-5 opacity-70" />
-            {date ? (
-              <span className="font-medium">
-                {date.toLocaleDateString("en-US", {
-                  month: "long",
-                  day: "numeric",
-                  year: "numeric",
-                })}
-              </span>
-            ) : (
-              <span>Select your birth date</span>
-            )}
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent className="w-full p-0 border-2">
-          <div className="p-3">
-            <Select
-              value={month.getFullYear().toString()}
-              onValueChange={(year) => {
-                const newYear = parseInt(year);
-                setMonth(new Date(newYear, month.getMonth()));
-                if (date) {
-                  const newDate = new Date(date.setFullYear(newYear));
-                  setDate(newDate);
-                }
-              }}
+      <div>
+        <Popover open={open} onOpenChange={setOpen}>
+          <PopoverTrigger asChild>
+            <Button
+              variant="outline"
+              className={cn(
+                "w-full justify-start text-left font-normal h-14 px-4",
+                !date && "text-muted-foreground hover:text-primary",
+              )}
             >
-              <SelectTrigger className="w-[120px]">
-                <SelectValue placeholder="Year" />
-              </SelectTrigger>
-              <SelectContent>
-                {Array.from(
-                  { length: new Date().getFullYear() - 1900 + 1 },
-                  (_, i) => new Date().getFullYear() - i,
-                ).map((year) => (
-                  <SelectItem key={year} value={year.toString()}>
-                    {year}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-          <Calendar
-            mode="single"
-            selected={date}
-            onSelect={handleDateSelect}
-            disabled={(date) => date > new Date()}
-            defaultMonth={new Date(2000, 0)}
-            month={month}
-            onMonthChange={setMonth}
-            fromYear={1900}
-            toYear={new Date().getFullYear()}
-          />
-        </PopoverContent>
-      </Popover>
+              <CalendarIcon className="mr-3 h-5 w-5 opacity-70" />
+              {date ? (
+                <span className="font-medium">
+                  {date.toLocaleDateString("en-US", {
+                    month: "long",
+                    day: "numeric",
+                    year: "numeric",
+                  })}
+                </span>
+              ) : (
+                <span>Select your birth date</span>
+              )}
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-full p-0 border-2">
+            <div className="p-3">
+              <Select
+                value={month.getFullYear().toString()}
+                onValueChange={(year) => {
+                  const newYear = parseInt(year);
+                  setMonth(new Date(newYear, month.getMonth()));
+                  if (date) {
+                    const newDate = new Date(date.setFullYear(newYear));
+                    setDate(newDate);
+                  }
+                }}
+              >
+                <SelectTrigger className="w-[120px]">
+                  <SelectValue placeholder="Year" />
+                </SelectTrigger>
+                <SelectContent>
+                  {Array.from(
+                    { length: new Date().getFullYear() - 1900 + 1 },
+                    (_, i) => new Date().getFullYear() - i,
+                  ).map((year) => (
+                    <SelectItem key={year} value={year.toString()}>
+                      {year}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <Calendar
+              mode="single"
+              selected={date}
+              onSelect={handleDateSelect}
+              disabled={(date) => date > new Date()}
+              defaultMonth={new Date(2000, 0)}
+              month={month}
+              onMonthChange={setMonth}
+              fromYear={1900}
+              toYear={new Date().getFullYear()}
+            />
+          </PopoverContent>
+        </Popover>
+
+        <span className="text-gray-500 underline text-sm cursor-pointer pt-2 block">
+          Why is this important?
+        </span>
+      </div>
     </div>
   );
 }
