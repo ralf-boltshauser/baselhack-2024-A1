@@ -45,6 +45,8 @@ const renderStatusBadge = (status: Status) => {
       return <Badge variant="warning">Waiting for counter offer</Badge>;
     case "review_documents":
       return <Badge variant="warning">Review documents</Badge>;
+    case "waiting_for_documents":
+      return <Badge variant="warning">Waiting for documents</Badge>;
     default:
       return <Badge variant="default">Unknown</Badge>;
   }
@@ -197,6 +199,11 @@ export default function LeadsTable({ leads }: { leads: Customer[] }) {
                       onClick={() => setStateFilter("review_documents")}
                     >
                       Review documents
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={() => setStateFilter("waiting_for_documents")}
+                    >
+                      Waiting for documents
                     </DropdownMenuItem>
                     <DropdownMenuItem
                       onClick={() => setStateFilter("requesting_documents")}
