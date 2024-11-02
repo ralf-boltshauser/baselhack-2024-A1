@@ -41,7 +41,6 @@ export const requestDocuments = authActionClient
         },
       },
     });
-    console.log("Documents requested");
   });
 
 export const approveRequest = authActionClient
