@@ -24,7 +24,6 @@ import {
   TableRow,
 } from "@repo/ui/components/ui/table";
 import { ChevronDown, ChevronUp, Filter, Search } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { formatCurrency, formatDate, formatYear } from "~/lib/format-helpers";
 import LeadDetail from "../lead-detail/lead-detail";
@@ -55,7 +54,6 @@ const renderStatusBadge = (status: Status) => {
 export default function LeadsTable({ leads }: { leads: Customer[] }) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [activeLead, setActiveLead] = useState<Customer | null>(null);
-  const router = useRouter();
 
   // states
   const [searchTerm, setSearchTerm] = useState("");
