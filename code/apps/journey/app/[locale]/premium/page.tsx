@@ -5,19 +5,41 @@ import { Button } from "@repo/ui/components/ui/button"
 import { Card, CardContent, CardHeader } from "@repo/ui/components/ui/card"
 import { Check } from "lucide-react"
 import Link from "next/link"
+import useStore from "~/store";
+import { calculateInsurancePrice } from "~/components/pre-premium/actions";
+import { getCustomer } from "~/components/pre-premium/actions";
+import { Customer } from "@repo/db";
+import { useRouter } from "next/navigation";
 
 export default function Component() {
   const [mounted, setMounted] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [monthlyPrice, setMonthlyPrice] = useState<number | null>(null);
+  const [customer, setCustomer] = useState<Customer | null>(null);
+  const customerId = useStore((state) => state.customerId);
+  const router = useRouter();
 
   useEffect(() => {
     setMounted(true);
-    const timer = setTimeout(() => {
+    
+    const fetchPrice = async () => {
+      if (customerId) {
+        try {
+          const price = await calculateInsurancePrice(customerId);
+          setMonthlyPrice(price);
+          const customer = await getCustomer(customerId);
+          setCustomer(customer);
+        } catch (error) {
+          // Removed console.error
+        }
+      }
       setIsLoading(false);
-    }, 3000);
+    };
 
+
+    const timer = setTimeout(fetchPrice, 2000);
     return () => clearTimeout(timer);
-  }, []);
+  }, [customerId]);
 
   if (!mounted) {
     return null;
@@ -51,10 +73,12 @@ export default function Component() {
           <div className="space-y-1">
             <div className="flex items-baseline justify-center gap-2">
               <span className="text-3xl font-bold">CHF</span>
-              <span className="text-5xl font-bold">28.75</span>
+              <span className="text-5xl font-bold">{monthlyPrice?.toFixed(2)}</span>
               <span className="text-lg text-muted-foreground">/ Monat</span>
             </div>
-            <p className="text-sm text-muted-foreground">payable CHF 344.60 per year</p>
+            <p className="text-sm text-muted-foreground">
+              payable CHF {(monthlyPrice ? monthlyPrice * 12 : 0).toFixed(2)} per year
+            </p>
           </div>
         </CardHeader>
         <CardContent className="space-y-6">
@@ -81,7 +105,7 @@ export default function Component() {
             <div className="flex items-center justify-between">
               <span className="font-medium">Insurance Sum:</span>
               <div className="flex items-center gap-2">
-                <span>CHF 610,000.00</span>
+                <span>CHF {customer?.insuranceSum?.toLocaleString()}</span>
                 <Button variant="ghost" size="sm" className="h-auto p-0 text-primary hover:text-primary">
                   Edit
                 </Button>
@@ -90,7 +114,7 @@ export default function Component() {
             <div className="flex items-center justify-between">
               <span className="font-medium">Term:</span>
               <div className="flex items-center gap-2">
-                <span>10 Years</span>
+                <span>{customer?.duration} years</span>
                 <Button variant="ghost" size="sm" className="h-auto p-0 text-primary hover:text-primary">
                   Edit
                 </Button>
@@ -101,7 +125,7 @@ export default function Component() {
       </Card>
 
       <div className="space-y-3">
-        <Button className="w-full" size="lg">
+        <Button className="w-full" size="lg" onClick={() => router.push('/post-premium')}>
           Get Covered in 5 Minutes
         </Button>
         <Link

@@ -1,80 +1,104 @@
 "use server";
 
-import { Gender, prisma } from "@repo/db";
+import { Gender, prisma, Customer } from "@repo/db";
 
 export async function createCustomer() {
-  const customer = await prisma.customer.create({});
-  console.log('Created customer:', customer);
-  return customer;
+  return await prisma.customer.create({});
 }
 
 export async function updateGender(customerId: number, gender: Gender) {
-  console.log('Updating gender:', { customerId, gender });
-  const customer = await prisma.customer.update({
+  return await prisma.customer.update({
     where: { id: customerId },
     data: { 
       gender,
       genderScore: gender === Gender.male ? 6 : 4 
     },
   });
-  console.log('Updated customer gender:', customer);
-  return customer;
 }
 
 export async function updateBirthday(customerId: number, birthday: Date) {
-  console.log('Updating birthday:', { customerId, birthday });
   const age = Math.floor((Date.now() - birthday.getTime()) / (365.25 * 24 * 60 * 60 * 1000));
   const score = Math.min(Math.max(Math.floor(age / 10), 1), 10);
-  const customer = await prisma.customer.update({
+  return await prisma.customer.update({
     where: { id: customerId },
     data: { 
       birthdate: birthday,
       ageScore: score
     },
   });
-  console.log('Updated customer birthday:', customer);
-  return customer;
 }
 
 export async function updateSmokerStatus(customerId: number, isSmoker: boolean) {
-  console.log('Updating smoker status:', { customerId, isSmoker });
-  const customer = await prisma.customer.update({
+  return await prisma.customer.update({
     where: { id: customerId },
     data: { 
       smoking: isSmoker,
       smokeScore: isSmoker ? 10 : 0 
     },
   });
-  console.log('Updated customer smoker status:', customer);
-  return customer;
 }
 
 export async function updateCoverageAmount(customerId: number, coverageAmount: number | null) {
-  console.log('Updating coverage amount:', { customerId, coverageAmount });
   const score = coverageAmount 
     ? Math.min(Math.max(Math.floor(coverageAmount / 100000), 1), 10)
     : 0;
-  const customer = await prisma.customer.update({
+  return await prisma.customer.update({
     where: { id: customerId },
     data: { 
       insuranceSum: coverageAmount,
       insuranceSumScore: score
     },
   });
-  console.log('Updated customer coverage amount:', customer);
-  return customer;
 }
 
 export async function updateDuration(customerId: number, duration: number) {
-  console.log('Updating duration:', { customerId, duration });
   const score = Math.min(Math.max(Math.floor(duration / 5), 1), 10);
-  const customer = await prisma.customer.update({
+  return await prisma.customer.update({
     where: { id: customerId },
     data: { 
       duration: duration,
       durationScore: score 
     },
   });
-  console.log('Updated customer duration:', customer);
-  return { customer, shouldRedirect: true };
+}
+
+export async function calculateInsurancePrice(customerId: number): Promise<number> {
+  // Get customer data with all scores
+  const customer = await prisma.customer.findUnique({
+    where: { id: customerId }
+  });
+
+  if (!customer) {
+    throw new Error('Customer not found');
+  }
+
+  // Base price in CHF
+  const basePrice = 50;
+
+  // Calculate multipliers based on scores (each score is 0-10)
+  const ageMultiplier = (customer.ageScore || 0) * 0.1;        // 0-1.0
+  const genderMultiplier = (customer.genderScore || 0) * 0.05; // 0-0.5
+  const smokeMultiplier = (customer.smokeScore || 0) * 0.2;    // 0-2.0
+  const durationMultiplier = Math.max(1 - ((customer.durationScore || 0) * 0.05), 0.5); // 0.5-1.0
+  const coverageMultiplier = (customer.insuranceSumScore || 0) * 0.15; // 0-1.5
+
+  // Calculate final monthly price
+  const monthlyPrice = basePrice * (1 + ageMultiplier + genderMultiplier + smokeMultiplier) 
+    * durationMultiplier 
+    * (1 + coverageMultiplier);
+
+  // Round to 2 decimal places
+  return Math.round(monthlyPrice * 100) / 100;
+}
+
+export async function getCustomer(customerId: number): Promise<Customer | null> {
+  const customer = await prisma.customer.findUnique({
+    where: { id: customerId }
+  });
+
+  if (!customer) {
+    throw new Error(`Customer with id ${customerId} not found`);
+  }
+
+  return customer;
 }

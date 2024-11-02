@@ -1,15 +1,15 @@
 "use client";
 
 import { Button } from "@repo/ui/components/ui/button";
-import { parseAsInteger, useQueryState } from "nuqs";
 import { useState } from "react";
 import useStore from "~/store";
-import { updateCoverageAmount } from "../actions";
+import { updateDuration } from "../actions";
+import { useRouter } from "next/navigation";
 
 export default function DurationPicker() {
-  const [step, setStep] = useQueryState("step", parseAsInteger.withDefault(0));
   const customerId = useStore((state) => state.customerId);
   const [selectedDuration, setSelectedDuration] = useState<number | null>(null);
+  const router = useRouter();
 
   const durations = [5, 10, 15, 20] as const;
 
@@ -25,8 +25,8 @@ export default function DurationPicker() {
             onClick={async () => {
               setSelectedDuration(duration);
               if (!customerId) return;
-              await updateCoverageAmount(customerId, duration);
-              setStep(step + 1);
+              await updateDuration(customerId, duration);
+              router.push("/premium");
             }}
             className="flex-1 min-w-[4rem]"
           >
