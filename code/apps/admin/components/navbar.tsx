@@ -10,7 +10,7 @@ import Link from "next/link";
 
 export default function Navbar() {
   return (
-    <nav className="flex items-center justify-between px-8 pb-4 pt-8 bg-white shadow-sm">
+    <nav className="flex items-center justify-between px-12 pb-4 pt-8 bg-white shadow-md">
       <div className="flex items-center space-x-12">
         <div className="flex items-end">
           <Image
@@ -22,7 +22,7 @@ export default function Navbar() {
           />
         </div>
         <div className="flex space-x-12">
-          <NavItem href="/leads" isActive>
+          <NavItem href="/" isActive>
             Leads
           </NavItem>
           <NavItem href="/configuration">Configuration</NavItem>
