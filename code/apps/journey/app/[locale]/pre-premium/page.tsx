@@ -21,43 +21,27 @@ export default function Page() {
     },
     {
       key: "genderPicker",
-      component: (
-        <GenderPicker stepProperties={{ gender: null }} onUpdate={() => {}} />
-      ),
+      component: <GenderPicker />,
       stepProperties: {},
     },
     {
       key: "birthdayPicker",
-      component: (
-        <BirthdayPicker
-          stepProperties={{ birthday: null }}
-          onUpdate={() => {}}
-        />
-      ),
+      component: <BirthdayPicker />,
       stepProperties: {},
     },
     {
       key: "smokerPicker",
-      component: (
-        <SmokerPicker stepProperties={{ isSmoker: null }} onUpdate={() => {}} />
-      ),
+      component: <SmokerPicker />,
       stepProperties: {},
     },
     {
       key: "coveragePicker",
-      component: (
-        <CoveragePicker stepProperties={{ coverage: 0 }} onUpdate={() => {}} />
-      ),
+      component: <CoveragePicker />,
       stepProperties: {},
     },
     {
       key: "durationPicker",
-      component: (
-        <DurationPicker
-          stepProperties={{ duration: null }}
-          onUpdate={() => {}}
-        />
-      ),
+      component: <DurationPicker />,
       stepProperties: {},
     },
   ];

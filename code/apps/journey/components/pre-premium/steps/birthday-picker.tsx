@@ -26,8 +26,8 @@ type BirthdayProperties = {
 };
 
 interface BirthdayPickerProps {
-  stepProperties: BirthdayProperties;
-  onUpdate: (properties: Partial<BirthdayProperties>) => void;
+  stepProperties?: BirthdayProperties;
+  onUpdate?: (properties: Partial<BirthdayProperties>) => void;
 }
 
 export default function BirthdayPicker({
@@ -52,7 +52,7 @@ export default function BirthdayPicker({
       setOpen(false);
 
       await updateBirthday(customerId, selectedDate);
-      onUpdate({ birthday: selectedDate });
+      onUpdate?.({ birthday: selectedDate });
       setStep(step + 1);
     } catch (error) {
       console.error("Failed to update birthday:", error);

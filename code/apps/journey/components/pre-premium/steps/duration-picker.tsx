@@ -11,8 +11,8 @@ type DurationProperties = {
 };
 
 interface DurationPickerProps {
-  stepProperties: DurationProperties;
-  onUpdate: (properties: Partial<DurationProperties>) => void;
+  stepProperties?: DurationProperties;
+  onUpdate?: (properties: Partial<DurationProperties>) => void;
 }
 
 export default function DurationPicker({
@@ -42,7 +42,7 @@ export default function DurationPicker({
                 setSelectedDuration(duration);
                 if (!customerId) return;
                 await updateDuration(customerId, duration);
-                onUpdate({ duration });
+                onUpdate?.({ duration });
                 router.push("/premium");
               }}
               className="flex-1 min-w-[4rem]"

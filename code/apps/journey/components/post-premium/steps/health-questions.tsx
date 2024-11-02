@@ -148,7 +148,7 @@ export default function HealthQuestions({
               </p>
               <Input
                 placeholder="Enter details about your chronic illness"
-                value={chronicIllnessesInfo}
+                value={chronicIllnessesInfo ?? ""}
                 onChange={(e) => setChronicIllnessesInfo(e.target.value)}
               />
             </div>
@@ -183,7 +183,7 @@ export default function HealthQuestions({
               </p>
               <Input
                 placeholder="Enter details about your hospital stays or surgeries"
-                value={hospitalizationInfo}
+                value={hospitalizationInfo ?? ""}
                 onChange={(e) => setHospitalizationInfo(e.target.value)}
               />
             </div>
@@ -218,7 +218,7 @@ export default function HealthQuestions({
               </p>
               <Input
                 placeholder="Enter details about your serious illness"
-                value={seriousIllnessesInfo}
+                value={seriousIllnessesInfo ?? ""}
                 onChange={(e) => setSeriousIllnessesInfo(e.target.value)}
               />
             </div>
@@ -252,7 +252,7 @@ export default function HealthQuestions({
               </p>
               <Input
                 placeholder="Enter your current medications"
-                value={medicationInfo}
+                value={medicationInfo ?? ""}
                 onChange={(e) => setMedicationInfo(e.target.value)}
               />
             </div>

@@ -5,14 +5,16 @@ import { parseAsInteger, useQueryState } from "nuqs";
 import useStore from "~/store";
 import { updateSmokerStatus } from "../actions";
 import Image from "next/image";
+import { useState } from "react";
+import { cn } from "@repo/ui/lib/utils";
 
 type SmokerProperties = {
   isSmoker: boolean | null;
 };
 
 interface SmokerPickerProps {
-  stepProperties: SmokerProperties;
-  onUpdate: (properties: Partial<SmokerProperties>) => void;
+  stepProperties?: SmokerProperties;
+  onUpdate?: (properties: Partial<SmokerProperties>) => void;
 }
 
 export default function SmokerPicker({
@@ -23,11 +25,15 @@ export default function SmokerPicker({
 }: SmokerPickerProps) {
   const [step, setStep] = useQueryState("step", parseAsInteger.withDefault(0));
   const customerId = useStore((state) => state.customerId);
+  const [doSmoke, setDoSmoke] = useState<boolean | null>(
+    stepProperties.isSmoker,
+  );
 
   const handleClick = async (isSmoker: boolean) => {
     if (!customerId) return;
+    setDoSmoke(isSmoker);
     await updateSmokerStatus(customerId, isSmoker);
-    onUpdate({ isSmoker });
+    onUpdate?.({ isSmoker });
     setStep(step + 1);
   };
 
@@ -38,8 +44,8 @@ export default function SmokerPicker({
         <div className="flex gap-8">
           <Button
             onClick={() => handleClick(true)}
-            variant={stepProperties.isSmoker === true ? "default" : "ghost"}
-            className="flex flex-col items-center w-24 h-24 p-4 hover:bg-gray-100 rounded-lg"
+            variant={doSmoke === true ? "default" : "ghost"}
+            className="flex flex-col items-center w-24 h-24 p-4 rounded-lg"
           >
             <Image
               src="/icons/smoker.svg"
@@ -51,8 +57,8 @@ export default function SmokerPicker({
           </Button>
           <Button
             onClick={() => handleClick(false)}
-            variant={stepProperties.isSmoker === false ? "default" : "ghost"}
-            className="flex flex-col items-center w-24 h-24 p-4 hover:bg-gray-100 rounded-lg"
+            variant={doSmoke === false ? "default" : "ghost"}
+            className="flex flex-col items-center w-24 h-24 p-4 rounded-lg"
           >
             <Image
               src="/icons/non-smoker.svg"
