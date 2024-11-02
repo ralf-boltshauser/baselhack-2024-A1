@@ -25,9 +25,10 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body className={inter.className + " "}>
-        <Navbar />
+          <Navbar />
           <SignedIn>
-        <div className="py-8 px-12">{children}</div></SignedIn>
+            <div className="py-8 px-12">{children}</div>
+          </SignedIn>
           <SignedOut>
             <SignInButton />
           </SignedOut>
