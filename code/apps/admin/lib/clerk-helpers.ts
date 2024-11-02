@@ -10,8 +10,6 @@ export const getUser: () => Promise<{
     throw new Error("Unauthorized");
   }
 
-  console.log(clerkUser);
-
   const user = await prisma.employee.findUnique({
     where: {
       clerkId: clerkUser.id,

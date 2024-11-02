@@ -11,11 +11,9 @@ export default function GenderPicker() {
   const customerId = useStore((state) => state.customerId);
 
   const handleClick = async (gender: Gender) => {
-    console.log(customerId);
     if (!customerId) {
       return;
     }
-    console.log("step", step);
     await updateGender(customerId, gender);
     setStep(step + 1);
   };
