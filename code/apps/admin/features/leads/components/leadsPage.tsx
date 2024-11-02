@@ -19,6 +19,7 @@ const archivedLeadStatuses: Status[] = [
 const activeLeadStatuses: Status[] = [
   "requesting_documents",
   "waiting_for_counter_offer",
+  "waiting_for_documents",
   "review_documents",
 ] as const;
 
