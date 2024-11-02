@@ -22,7 +22,7 @@ export const proceedWithConditions = authActionClient
 
     // TODO send email
 
-    revalidatePath("/leads");
+    revalidatePath("/");
   });
 
 export const requestDocuments = authActionClient
