@@ -1,6 +1,5 @@
 "use client";
 
-import { format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
 import { Button } from "@repo/ui/components/ui/button";
 import { Calendar } from "@repo/ui/components/ui/calendar";
@@ -61,7 +60,7 @@ export default function BirthdayPicker() {
           >
             <CalendarIcon className="mr-3 h-5 w-5 opacity-70" />
             {date ? (
-              <span className="font-medium">{format(date, "MMMM yyyy")}</span>
+              <span className="font-medium">{date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
             ) : (
               <span>Select your birth date</span>
             )}
