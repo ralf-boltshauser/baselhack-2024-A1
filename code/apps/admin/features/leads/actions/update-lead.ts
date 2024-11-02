@@ -41,7 +41,8 @@ export const requestDocuments = authActionClient
         },
       },
     });
-    console.log("Documents requested");
+
+    revalidatePath("/");
   });
 
 export const approveRequest = authActionClient
@@ -51,4 +52,6 @@ export const approveRequest = authActionClient
       where: { id: Number(customerId) },
       data: { status: Status.accepted },
     });
+
+    revalidatePath("/");
   });
