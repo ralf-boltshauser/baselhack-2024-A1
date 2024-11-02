@@ -49,20 +49,16 @@ export default function Main({
   const setLoaded = useStore((state) => state.setLoaded);
   useEffect(() => {
     if (!customerId && loaded) {
-      console.log("Triggering customer creation", { customerId, loaded });
       refetch();
-      console.log("refetched");
     }
   }, [customerId, loaded]);
 
   useEffect(() => {
-    console.log("Setting loaded to true");
     setLoaded(true);
   }, []);
 
   useEffect(() => {
     if (data) {
-      console.log("Customer created:", data);
       setCustomerId(Number(data.id));
     }
   }, [data]);

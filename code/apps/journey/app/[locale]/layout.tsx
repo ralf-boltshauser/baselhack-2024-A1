@@ -23,12 +23,12 @@ export default function RootLayout({
 
   return (
     <html lang={locale}>
-      <body className={inter.className + " p-5"}>
+      <body className={inter.className}>
         <I18nProviderClient locale={locale}>
           <NuqsAdapter>
             <Providers>
               <Navbar />
-              <div className="mx-auto max-w-3xl">{children}</div>
+              <div className="mx-auto max-w-3xl px-5">{children}</div>
             </Providers>
           </NuqsAdapter>
         </I18nProviderClient>
