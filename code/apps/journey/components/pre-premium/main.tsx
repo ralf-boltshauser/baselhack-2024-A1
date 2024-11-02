@@ -16,6 +16,7 @@ import Intro from "./steps/testing-comp";
 import BirthdayPicker from "./steps/birthday-picker";
 import SmokerPicker from "./steps/smoker-picker";
 import CoveragePicker from "./steps/coverage-picker";
+import DurationPicker from "./steps/duration-picker";
 
 export default function Main() {
   const [step, setStep] = useQueryState("step", parseAsInteger.withDefault(0));
@@ -95,6 +96,10 @@ export default function Main() {
     {
       key: "coveragePicker",
       component: <CoveragePicker />,
+    },
+    {
+      key: "durationPicker",
+      component: <DurationPicker />,
     },
   ];
 
