@@ -78,6 +78,7 @@ model Customer {
   documents               Document[]
   employee                Employee?          @relation(fields: [employeeId], references: [id])
   pastOperation           PastOperation[]
+  medicalHistory          MedicalHistory?
 }
 
 model Document {
@@ -92,6 +93,23 @@ model Document {
 model Job {
   id   Int    @id @default(autoincrement())
   name String
+  
+model MedicalHistory {
+  id         BigInt   @id @default(autoincrement())
+  customerId Int      @unique
+  customer   Customer @relation(fields: [customerId], references: [id])
+
+  hasChronicIllnesses  Boolean @default(false)
+  chronicIllnessesInfo String?
+
+  wasHospitalized     Boolean @default(false)
+  hospitalizationInfo String?
+
+  hasSeriousIllnesses  Boolean @default(false)
+  seriousIllnessesInfo String?
+
+  takesMedication Boolean @default(false)
+  medicationInfo  String?
 }
 
 enum Status {
