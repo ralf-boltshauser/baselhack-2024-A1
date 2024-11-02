@@ -180,6 +180,7 @@ export default function Main({ elements: initialElements }: MainProps) {
                 className="pointer-events-none opacity-50"
               >
                 {React.cloneElement(e.component, {
+                  isSelected: false,
                   stepProperties: e.stepProperties,
                   onUpdate: (newProperties: any) =>
                     updateStepProperties(e.key, newProperties),
@@ -192,6 +193,7 @@ export default function Main({ elements: initialElements }: MainProps) {
               {elements.slice(step, step + 1).map((e) => (
                 <motion.div key={e.key} layoutId={e.key}>
                   {React.cloneElement(e.component, {
+                    isSelected: true,
                     stepProperties: e.stepProperties,
                     onUpdate: (newProperties: any) =>
                       updateStepProperties(e.key, newProperties),

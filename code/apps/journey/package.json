@@ -25,6 +25,8 @@
     "react-dom": "^18",
     "react-phone-number-input": "^3.4.9",
     "react-signature-canvas": "^1.0.6",
+    "react-typing-effect": "^2.0.5",
+    "typewriter-effect": "^2.21.0",
     "zustand": "^5.0.1"
   },
   "devDependencies": {
