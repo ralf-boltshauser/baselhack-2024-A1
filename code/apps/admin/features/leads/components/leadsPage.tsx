@@ -90,8 +90,9 @@ const archivedLeadStatuses: Status[] = [
 ] as const;
 
 const activeLeadStatuses: Status[] = [
-  "waiting_for_approval",
   "requesting_documents",
+  "waiting_for_counter_offer",
+  "review_documents",
 ] as const;
 
 export default async function LeadsPage() {

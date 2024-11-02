@@ -22,7 +22,6 @@ import {
 import { formatCurrency, formatDate, formatYear } from "~/lib/format-helpers";
 import { Customer, Status } from "@repo/db";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 
 const renderStatusBadge = (status: Status) => {
   switch (status) {
@@ -36,8 +35,10 @@ const renderStatusBadge = (status: Status) => {
       return <Badge variant="default">Accepted with conditions</Badge>;
     case "requesting_documents":
       return <Badge variant="warning">Requesting documents</Badge>;
-    case "waiting_for_approval":
-      return <Badge variant="warning">Waiting for approval</Badge>;
+    case "waiting_for_counter_offer":
+      return <Badge variant="warning">Waiting for counter offer</Badge>;
+    case "review_documents":
+      return <Badge variant="warning">Review documents</Badge>;
     default:
       return <Badge variant="default">Unknown</Badge>;
   }
@@ -178,17 +179,25 @@ export default function LeadsTable({ leads }: { leads: Customer[] }) {
                       All
                     </DropdownMenuItem>
                     <DropdownMenuItem
-                      onClick={() => setStateFilter("waiting_for_approval")}
+                      onClick={() =>
+                        setStateFilter("waiting_for_counter_offer")
+                      }
                     >
-                      Waiting for approval
+                      Waiting for counter offer
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => setStateFilter("draft")}>
-                      Draft
+                    <DropdownMenuItem
+                      onClick={() => setStateFilter("review_documents")}
+                    >
+                      Review documents
                     </DropdownMenuItem>
                     <DropdownMenuItem
                       onClick={() => setStateFilter("requesting_documents")}
                     >
-                      Requesting documents
+                      Request documents
+                    </DropdownMenuItem>
+
+                    <DropdownMenuItem onClick={() => setStateFilter("draft")}>
+                      Draft
                     </DropdownMenuItem>
                     <DropdownMenuItem
                       onClick={() => setStateFilter("rejected")}
