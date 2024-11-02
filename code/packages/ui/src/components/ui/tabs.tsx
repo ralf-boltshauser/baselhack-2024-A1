@@ -27,14 +27,14 @@ const TabsList = React.forwardRef<
   React.useEffect(() => {
     if (!triggersRef.current[activeTab]) return;
     setWidth(triggersRef.current[activeTab].offsetWidth);
-    setX(triggersRef.current[activeTab].offsetLeft);
+    setX(triggersRef.current[activeTab].offsetLeft - 48); // 3rem is approximately 48px
   }, [activeTab, triggersRef.current]);
 
   return (
     <TabsPrimitive.List
       ref={ref}
       className={cn(
-        "relative inline-flex h-10 items-center justify-start p-1 text-muted-foreground w-full border-b-[1px] ",
+        "relative inline-flex h-10 items-center justify-start p-1 text-muted-foreground border-b-[1px] -mx-12 w-screen pl-12",
         className,
       )}
       {...props}
