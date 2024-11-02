@@ -41,15 +41,15 @@ export default function Navbar() {
         <div className="w-px h-6 bg-gray-200" aria-hidden="true" />
         <div className="flex items-center space-x-3">
           <Avatar className="w-10 h-10">
-            <AvatarImage src={user?.imageUrl} alt={user?.fullName || "User"} />
-            <AvatarFallback>{user?.firstName?.charAt(0) || "U"}</AvatarFallback>
+            <AvatarImage src={user?.imageUrl} alt={user?.fullName || "..."} />
+            <AvatarFallback>{user?.firstName?.charAt(0) || "?"}</AvatarFallback>
           </Avatar>
           <div className="flex flex-col">
             <span className="text-sm font-medium text-gray-900">
-              {user?.fullName || "John Doe"}
+              {user?.fullName || "loading..."}
             </span>
             <span className="text-xs text-gray-500">
-              {user?.emailAddresses[0]?.emailAddress || "john@example.com"}
+              {user?.emailAddresses[0]?.emailAddress || "loading..."}
             </span>
           </div>
         </div>

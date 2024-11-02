@@ -6,11 +6,105 @@ import {
   TabsContent,
 } from "@repo/ui/components/ui/tabs";
 import { Download } from "lucide-react";
+import LeadsTable from "./leadsTable";
+import { Customer, Status } from "@repo/db";
+
+// Sample data
+const leads: Customer[] = [
+  {
+    id: BigInt(1),
+    requestDate: new Date("2023-05-01"),
+    name: "John Doe",
+    email: "dummy@test.com",
+    insuranceSum: 100000,
+    trafficLightColor: "green",
+    status: "accepted",
+    duration: 1,
+    premium: 1000,
+  },
+  {
+    id: BigInt(2),
+    requestDate: new Date("2023-05-02"),
+    name: "Jane Smith",
+    insuranceSum: 200000,
+    email: "dummy@test.com",
+    status: "rejected",
+    trafficLightColor: "red",
+    decisiveFactor: "healthCheck",
+    duration: 2,
+    premium: 1800,
+  },
+  {
+    id: BigInt(3),
+    requestDate: new Date("2023-05-03"),
+    name: "Bob Johnson",
+    insuranceSum: 150000,
+    email: "dummy@test.com",
+    status: "accepted_with_conditions",
+    trafficLightColor: "orange",
+    decisiveFactor: "score",
+    duration: 1,
+    premium: 1200,
+  },
+  {
+    id: BigInt(4),
+    requestDate: new Date("2023-05-04"),
+    name: "Alice Brown",
+    email: "dummy@test.com",
+    insuranceSum: 300000,
+    status: "requesting_documents",
+    trafficLightColor: "orange",
+    decisiveFactor: "healthCheck",
+    duration: 3,
+    premium: 2500,
+  },
+  {
+    id: BigInt(99),
+    requestDate: new Date("2023-05-04"),
+    name: "Alice Brown",
+    email: "dummy@test.com",
+    insuranceSum: 300000,
+    status: "draft",
+    duration: 3,
+    premium: 2500,
+  },
+  {
+    id: BigInt(5),
+    requestDate: new Date("2023-05-05"),
+    name: "Charlie Wilson",
+    email: "dummy@test.com",
+    status: "waiting_for_approval",
+    insuranceSum: 250000,
+    trafficLightColor: "orange",
+    decisiveFactor: "score",
+    duration: 2,
+    premium: 2000,
+  },
+];
+
+const archivedLeadStatuses: Status[] = [
+  "accepted",
+  "rejected",
+  "accepted_with_conditions",
+] as const;
+
+const activeLeadStatuses: Status[] = [
+  "waiting_for_approval",
+  "requesting_documents",
+] as const;
 
 export default async function LeadsPage() {
+  const activeLeads = leads.filter((lead) =>
+    activeLeadStatuses.includes(lead.status as Status),
+  );
+  const archivedLeads = leads.filter((lead) =>
+    archivedLeadStatuses.includes(lead.status as Status),
+  );
+  const draftLeads = leads.filter((lead) => lead.status === "draft");
+
   return (
     <div className="w-full">
-      <div className="flex justify-between items-center bg-background mb-10">
+      <div className="flex justify-between items-center bg-background mb-8">
         <h1 className="text-3xl">Leads</h1>
         <Button variant="outline">
           <Download className="h-4 w-4 mr-4" />
@@ -21,18 +115,16 @@ export default async function LeadsPage() {
         <TabsList className="justify-start">
           <TabsTrigger value="active">Active</TabsTrigger>
           <TabsTrigger value="archived">Archived</TabsTrigger>
+          <TabsTrigger value="draft">Drafts</TabsTrigger>
         </TabsList>
         <TabsContent value="active" className="mt-4">
-          <div className="p-4 rounded-lg bg-card text-card-foreground">
-            <h2 className="text-lg font-semibold mb-2">Active Content</h2>
-            <p>Your active content goes here.</p>
-          </div>
+          <LeadsTable leads={activeLeads} />
         </TabsContent>
         <TabsContent value="archived" className="mt-4">
-          <div className="p-4 rounded-lg bg-card text-card-foreground">
-            <h2 className="text-lg font-semibold mb-2">Archived Content</h2>
-            <p>Your archived content goes here.</p>
-          </div>
+          <LeadsTable leads={archivedLeads} />
+        </TabsContent>
+        <TabsContent value="draft" className="mt-4">
+          <LeadsTable leads={draftLeads} />
         </TabsContent>
       </Tabs>
     </div>
