@@ -15,7 +15,7 @@ datasource db {
 }
 
 model AttributeMultiplier {
-  id         BigInt        @id @default(autoincrement())
+  id         Int           @id @default(autoincrement())
   attribute  AttributeName
   multiplier Float
   createdAt  DateTime      @default(now())
@@ -23,7 +23,7 @@ model AttributeMultiplier {
 }
 
 model Employee {
-  id        BigInt     @id @default(autoincrement())
+  id        Int        @id @default(autoincrement())
   clerkId   String     @unique
   name      String
   avatarUrl String?
@@ -33,71 +33,73 @@ model Employee {
 }
 
 model PastOperation {
-  id            BigInt    @id @default(autoincrement())
-  customerId    BigInt
+  id            Int       @id @default(autoincrement())
+  customerId    Int
   description   String
   operationDate DateTime?
   customer      Customer  @relation(fields: [customerId], references: [id])
 }
 
 model Customer {
-  cardiacIssues          Boolean?
-  diabeticCondition      Boolean?
-  hypertension           Boolean?
-  cardiacIssuesScore     Int?
-  diabeticConditionScore Int?
-  hypertensionScore      Int?
-  step                   Int?
-  bmiScore               Int?
-  smokeScore             Int?
-  jobScore               Int?
-  addressScore           Int?
-  ageScore               Int?
-  employeeIdScore        Int?
-  insuranceSumScore      Int?
-  durationScore          Int?
-  premiumScore           Int?
-  statusScore            Int?
-  genderScore            Int?
-  decisiveFactorScore    Int?
-  trafficLightScore      Int?
-  requestDateScore       Int?
-  id                     BigInt             @id @default(autoincrement())
-  name                   String?
-  address                String?
-  birthdate              DateTime?
-  smoking                Boolean?
-  bmi                    Float?
-  job                    String?
-  employeeId             BigInt?
-  insuranceSum           Float?
-  duration               Int?
-  premium                Float?
-  status                 Status?            @default(draft)
-  requestDate            DateTime           @default(now())
-  email                  String?            @unique
-  gender                 Gender?
-  decisiveFactor         DecisiveFactor?
-  idDocument             String[]
-  trafficLightColor      TrafficLightColor?
-  documents              Document[]
-  employee               Employee?          @relation(fields: [employeeId], references: [id])
-  pastOperation          PastOperation[]
+  cardiacIssues           Boolean?
+  diabeticCondition       Boolean?
+  hypertension            Boolean?
+  cardiacIssuesScore      Int?
+  diabeticConditionScore  Int?
+  hypertensionScore       Int?
+  step                    Int?
+  bmiScore                Int?
+  smokeScore              Int?
+  jobScore                Int?
+  addressScore            Int?
+  ageScore                Int?
+  employeeIdScore         Int?
+  insuranceSumScore       Int?
+  durationScore           Int?
+  premiumScore            Int?
+  statusScore             Int?
+  genderScore             Int?
+  decisiveFactorScore     Int?
+  trafficLightScore       Int?
+  requestDateScore        Int?
+  id                      Int                @id @default(autoincrement())
+  name                    String?
+  address                 String?
+  birthdate               DateTime?
+  smoking                 Boolean?
+  bmi                     Float?
+  job                     String?
+  employeeId              Int?
+  insuranceSum            Float?
+  recommendedInsuranceSum Float?
+  duration                Int?
+  premium                 Float?
+  status                  Status?            @default(draft)
+  requestDate             DateTime           @default(now())
+  email                   String?            @unique
+  gender                  Gender?
+  decisiveFactor          DecisiveFactor?
+  idDocument              String[]           @default([])
+  trafficLightColor       TrafficLightColor?
+  documents               Document[]
+  employee                Employee?          @relation(fields: [employeeId], references: [id])
+  pastOperation           PastOperation[]
 }
 
 model Document {
-  id         BigInt   @id @default(autoincrement())
+  id         Int      @id @default(autoincrement())
   customer   Customer @relation(fields: [customerId], references: [id])
-  customerId BigInt
-  fileUrl    String
+  customerId Int
+  fileUrl    String?
   uploadDate DateTime @default(now())
   title      String
 }
 
 enum Status {
   draft
-  waiting_for_approval
+  waiting_for_counter_offer
   requesting_documents
+  review_documents
   accepted
   rejected
   accepted_with_conditions
