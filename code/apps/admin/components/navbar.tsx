@@ -10,9 +10,11 @@ import {
   AvatarImage,
 } from "@repo/ui/components/ui/avatar";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export default function Navbar() {
   const { user, isLoaded } = useUser();
+  const pathname = usePathname();
 
   return (
     <nav className="flex items-center justify-between px-12 pb-4 pt-8 bg-white shadow-md">
@@ -27,10 +29,15 @@ export default function Navbar() {
           />
         </div>
         <div className="flex space-x-12">
-          <NavItem href="/" isActive>
+          <NavItem href="/" isActive={pathname === "/"}>
             Leads
           </NavItem>
-          <NavItem href="/configuration">Configuration</NavItem>
+          <NavItem
+            href="/configuration"
+            isActive={pathname === "/configuration"}
+          >
+            Configuration
+          </NavItem>
         </div>
       </div>
       {isLoaded && (
