@@ -31,3 +31,10 @@ export async function updateSmokerStatus(customerId: number, isSmoker: boolean) 
     data: { smoking: isSmoker },
   });
 }
+
+export async function updateCoverageAmount(customerId: number, coverageAmount: number | null) {
+  await prisma.customer.update({
+    where: { id: customerId },
+    data: { insuranceSum: coverageAmount },
+  });
+}

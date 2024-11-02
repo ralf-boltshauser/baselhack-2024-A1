@@ -14,27 +14,43 @@ import { parseAsInteger, useQueryState } from "nuqs";
 import useStore from "~/store";
 import { updateBirthday } from "../actions";
 import { useState } from "react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@repo/ui/components/ui/select";
 
 export default function BirthdayPicker() {
   const [step, setStep] = useQueryState("step", parseAsInteger.withDefault(0));
   const customerId = useStore((state) => state.customerId);
-  const [date, setDate] = useState<Date>();
+  const [date, setDate] = useState<Date | undefined>(undefined);
+  const [open, setOpen] = useState(false);
+  const [month, setMonth] = useState<Date>(new Date(2000, 0));
 
-  const handleSubmit = async () => {
-    if (!customerId || !date) {
-      return;
+  const handleDateSelect = async (selectedDate: Date | undefined) => {
+    if (!customerId || !selectedDate) return;
+
+    try {
+      setDate(selectedDate);
+      setOpen(false);
+
+      await updateBirthday(customerId, selectedDate);
+      setStep(step + 1);
+    } catch (error) {
+      console.error('Failed to update birthday:', error);
+      setDate(undefined);
     }
-    await updateBirthday(customerId, date);
-    setStep(step + 1);
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 w-full max-w-md">
       <div className="space-y-2">
-        <h2 className="text-2xl font-semibold tracking-tight">When's your birthday?</h2>
+        <h2 className="text-lg font-medium">When's your birthday?</h2>
       </div>
 
-      <Popover>
+      <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button
             variant="outline"
@@ -51,42 +67,47 @@ export default function BirthdayPicker() {
             )}
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-auto p-0 border-2">
+        <PopoverContent className="w-full p-0 border-2">
+          <div className="p-3">
+            <Select
+              value={month.getFullYear().toString()}
+              onValueChange={(year) => {
+                const newYear = parseInt(year);
+                setMonth(new Date(newYear, month.getMonth()));
+                if (date) {
+                  const newDate = new Date(date.setFullYear(newYear));
+                  setDate(newDate);
+                }
+              }}
+            >
+              <SelectTrigger className="w-[120px]">
+                <SelectValue placeholder="Year" />
+              </SelectTrigger>
+              <SelectContent>
+                {Array.from(
+                  { length: new Date().getFullYear() - 1900 + 1 },
+                  (_, i) => new Date().getFullYear() - i
+                ).map((year) => (
+                  <SelectItem key={year} value={year.toString()}>
+                    {year}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
           <Calendar
             mode="single"
             selected={date}
-            onSelect={setDate}
+            onSelect={handleDateSelect}
             disabled={(date) => date > new Date()}
-            defaultMonth={new Date(new Date().setFullYear(new Date().getFullYear() - 18))}
+            defaultMonth={new Date(2000, 0)}
+            month={month}
+            onMonthChange={setMonth}
             fromYear={1900}
             toYear={new Date().getFullYear()}
-            captionLayout="dropdown-buttons"
-            classNames={{
-              months: "space-y-4",
-              nav: "flex items-center justify-center gap-2",
-              nav_button_previous: "flex items-center justify-center",
-              nav_button_next: "flex items-center justify-center",
-              caption: "flex items-center gap-2",
-              caption_label: "hidden",
-              dropdown_month: "hidden",
-              dropdown_year: "text-lg font-semibold h-9 w-[120px] rounded-md focus:outline-none focus:ring-2 focus:ring-primary",
-              head: "hidden",
-              table: "w-full border-collapse",
-              cell: "text-center text-sm p-0 relative focus-within:relative focus-within:z-20",
-              day: "h-9 w-9 p-0 font-normal hover:bg-primary hover:text-primary-foreground",
-              day_selected: "bg-primary text-primary-foreground",
-            }}
           />
         </PopoverContent>
       </Popover>
-
-      <Button 
-        onClick={handleSubmit}
-        disabled={!date}
-        className="w-full h-12 text-base font-medium"
-      >
-        Continue
-      </Button>
     </div>
   );
 }

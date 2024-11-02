@@ -15,6 +15,8 @@ import GenderPicker from "./steps/gender-picker";
 import Intro from "./steps/testing-comp";
 import BirthdayPicker from "./steps/birthday-picker";
 import SmokerPicker from "./steps/smoker-picker";
+import CoveragePicker from "./steps/coverage-picker";
+
 export default function Main() {
   const [step, setStep] = useQueryState("step", parseAsInteger.withDefault(0));
 
@@ -89,6 +91,10 @@ export default function Main() {
     {
       key: "smokerPicker",
       component: <SmokerPicker />,
+    },
+    {
+      key: "coveragePicker",
+      component: <CoveragePicker />,
     },
   ];
 
