@@ -24,6 +24,7 @@ export const getLeadRequiredAction = authActionClient
     if (
       lead.status === Status.accepted ||
       lead.status === Status.accepted_with_conditions ||
+      lead.status === Status.waiting_for_documents ||
       lead.status === Status.rejected
     ) {
       return LeadRequiredAction.DEFAULT;

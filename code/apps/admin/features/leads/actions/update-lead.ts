@@ -31,7 +31,7 @@ export const requestDocuments = authActionClient
     await prisma.customer.update({
       where: { id: Number(customerId) },
       data: {
-        status: Status.review_documents,
+        status: Status.waiting_for_documents,
         documents: {
           createMany: {
             data: documents.map((document) => ({

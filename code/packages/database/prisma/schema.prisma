@@ -99,6 +99,7 @@ enum Status {
   draft
   waiting_for_counter_offer
   requesting_documents
+  waiting_for_documents
   review_documents
   accepted
   rejected
