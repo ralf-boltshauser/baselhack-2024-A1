@@ -17,6 +17,19 @@ async function main() {
     });
   }
 
+  // Seed risk thresholds
+  const riskThresholds = {
+    id: 1,
+    greenMax: 0.5,
+    orangeMax: 1,
+  };
+
+  await prisma.riskThreshold.upsert({
+    where: { id: riskThresholds.id },
+    update: {},
+    create: riskThresholds,
+  });
+
   // Seed Jobs
   const jobs = [
     {

@@ -3,7 +3,7 @@
 import { Input } from "@repo/ui/components/ui/input";
 import ConfigurationChart from "./configurationChart";
 import { Button } from "@repo/ui/components/ui/button";
-import { AttributeName } from "@repo/db";
+import { AttributeMultiplier, AttributeName } from "@repo/db";
 import { useState } from "react";
 
 function QuestionWeight({
@@ -23,16 +23,16 @@ function QuestionWeight({
   );
 }
 
-type Weights = {
-  [x in AttributeName]: number;
+const findWeight = (weights: AttributeMultiplier[], name: AttributeName) => {
+  return weights.find((weight) => weight.attribute === name);
 };
 
 export default function ConfigurationForm({
   currentWeights,
 }: {
-  currentWeights: Weights;
+  currentWeights: AttributeMultiplier[];
 }) {
-  const [weights, setWeights] = useState<Weights>(currentWeights);
+  const [weights, setWeights] = useState<AttributeMultiplier[]>(currentWeights);
 
   return (
     <div className="grid grid-cols-2">
@@ -44,9 +44,9 @@ export default function ConfigurationForm({
           </p>
         </div>
         <div className="flex flex-col gap-y-4">
-          <QuestionWeight
+          {/* <QuestionWeight
             question="Are you smoking ?"
-            value={weights.SMOKING}
+            value={findWeight(weights, AttributeName.SMOKING)
             onChange={(e) =>
               setWeights({ ...weights, SMOKING: e.target.value })
             }
@@ -95,7 +95,7 @@ export default function ConfigurationForm({
             onChange={(e) =>
               setWeights({ ...weights, HYPERTENSION: e.target.value })
             }
-          />
+          /> */}
           <Button variant="default" className="w-52">
             Save and apply
           </Button>

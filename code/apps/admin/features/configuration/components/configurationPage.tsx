@@ -1,6 +1,17 @@
+import { getAttributeMultiplier } from "../actions/get-attribute-multiplier";
 import ConfigurationForm from "./configurationForm";
 
 export default async function ConfigurationPage() {
+  const currentWeights = await getAttributeMultiplier();
+
+  if (
+    !currentWeights ||
+    currentWeights.data === null ||
+    currentWeights.data === undefined
+  ) {
+    throw new Error("No configurations found");
+  }
+
   return (
     <div className="w-full">
       <div className="flex justify-start items-start bg-background mb-8 flex-col gap-y-2">
@@ -10,7 +21,7 @@ export default async function ConfigurationPage() {
           with in your insurance pool.
         </p>
       </div>
-      <ConfigurationForm currentWeights={undefined} />
+      <ConfigurationForm currentWeights={currentWeights.data} />
     </div>
   );
 }
