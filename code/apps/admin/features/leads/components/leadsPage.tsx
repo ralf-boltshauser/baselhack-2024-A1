@@ -7,81 +7,9 @@ import {
   TabsTrigger,
 } from "@repo/ui/components/ui/tabs";
 import { Download } from "lucide-react";
-import { getAllLeads } from "../actions/get-leads";
 import LeadsTable from "./leadsTable";
-
-// Sample data
-// const leads: Customer[] = [
-//   {
-//     id: BigInt(1),
-//     requestDate: new Date("2023-05-01"),
-//     name: "John Doe",
-//     email: "dummy@test.com",
-//     insuranceSum: 100000,
-//     trafficLightColor: "green",
-//     status: "accepted",
-//     duration: 1,
-//     premium: 1000,
-//   },
-//   {
-//     id: BigInt(2),
-//     requestDate: new Date("2023-05-02"),
-//     name: "Jane Smith",
-//     insuranceSum: 200000,
-//     email: "dummy@test.com",
-//     status: "rejected",
-//     trafficLightColor: "red",
-//     decisiveFactor: "healthCheck",
-//     duration: 2,
-//     premium: 1800,
-//   },
-//   {
-//     id: BigInt(3),
-//     requestDate: new Date("2023-05-03"),
-//     name: "Bob Johnson",
-//     insuranceSum: 150000,
-//     email: "dummy@test.com",
-//     status: "accepted_with_conditions",
-//     trafficLightColor: "orange",
-//     decisiveFactor: "score",
-//     duration: 1,
-//     premium: 1200,
-//   },
-//   {
-//     id: BigInt(4),
-//     requestDate: new Date("2023-05-04"),
-//     name: "Alice Brown",
-//     email: "dummy@test.com",
-//     insuranceSum: 300000,
-//     status: "requesting_documents",
-//     trafficLightColor: "orange",
-//     decisiveFactor: "healthCheck",
-//     duration: 3,
-//     premium: 2500,
-//   },
-//   {
-//     id: BigInt(99),
-//     requestDate: new Date("2023-05-04"),
-//     name: "Alice Brown",
-//     email: "dummy@test.com",
-//     insuranceSum: 300000,
-//     status: "draft",
-//     duration: 3,
-//     premium: 2500,
-//   },
-//   {
-//     id: BigInt(5),
-//     requestDate: new Date("2023-05-05"),
-//     name: "Charlie Wilson",
-//     email: "dummy@test.com",
-//     status: "waiting_for_approval",
-//     insuranceSum: 250000,
-//     trafficLightColor: "orange",
-//     decisiveFactor: "score",
-//     duration: 2,
-//     premium: 2000,
-//   },
-// ];
+import { Status } from "@repo/db";
+import { getMyLeads } from "../actions/get-leads";
 
 const archivedLeadStatuses: Status[] = [
   "accepted",
@@ -97,7 +25,7 @@ const activeLeadStatuses: Status[] = [
 ] as const;
 
 export default async function LeadsPage() {
-  const leads = await getAllLeads();
+  const leads = await getMyLeads();
 
   if (!leads || leads.data === null || leads.data === undefined) {
     throw new Error("No leads found");
