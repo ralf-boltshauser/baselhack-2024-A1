@@ -76,5 +76,5 @@ export async function updateDuration(customerId: number, duration: number) {
     },
   });
   console.log('Updated customer duration:', customer);
-  return customer;
+  return { customer, shouldRedirect: true };
 }
