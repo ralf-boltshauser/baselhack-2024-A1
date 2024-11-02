@@ -104,17 +104,16 @@ export default function Main() {
               <motion.div
                 key={e.key}
                 layoutId={e.key}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
+                initial={{ opacity: 1 }}
+                animate={{
+                  opacity: 0.5,
+                  transition: { delay: 0.3, duration: 0.5 },
+                }}
                 exit={{ opacity: 0 }}
               >
                 {e.component}
               </motion.div>
             ))}
-            <motion.div
-              className="w-full h-full absolute inset-0 bg-white/50"
-              style={{ bottom: "auto", zIndex: 10 }}
-            />
           </motion.div>
           <div className="flex flex-col gap-4">
             <AnimatePresence mode="wait">
