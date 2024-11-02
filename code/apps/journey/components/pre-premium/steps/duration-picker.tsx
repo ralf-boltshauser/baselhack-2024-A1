@@ -1,10 +1,10 @@
 "use client";
 
 import { Button } from "@repo/ui/components/ui/button";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import useStore from "~/store";
 import { updateDuration } from "../actions";
-import { useRouter } from "next/navigation";
 
 type DurationProperties = {
   duration: number | null;

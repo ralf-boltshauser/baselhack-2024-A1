@@ -23,19 +23,67 @@ export default function Page() {
     },
     {
       key: "bmiPicker",
-      component: <BmiPicker />,
+      component: (
+        <BmiPicker
+          stepProperties={{
+            height: null,
+            weight: null,
+            bmi: null,
+          }}
+          onUpdate={() => {}}
+        />
+      ),
     },
     {
       key: "healthQuestions",
-      component: <HealthQuestions />,
+      component: (
+        <HealthQuestions
+          stepProperties={{
+            hasChronicIllness: null,
+            hasHospitalization: null,
+            hasSeriousIllness: null,
+            hasPrescription: null,
+            chronicIllnessesInfo: "",
+            hospitalizationInfo: "",
+            seriousIllnessesInfo: "",
+            medicationInfo: "",
+          }}
+          onUpdate={() => {}}
+        />
+      ),
     },
     {
       key: "pickBeneficiary",
-      component: <PickBeneficiary />,
+      component: (
+        <PickBeneficiary
+          stepProperties={{
+            beneficiaryType: null,
+            beneficiaryFirstName: "",
+            beneficiaryLastName: "",
+            beneficiaryEmail: "",
+            beneficiaryPhone: "",
+            beneficiaryAddress: "",
+            beneficiaryRelationship: "",
+            beneficiaryPercentage: 0,
+          }}
+          onUpdate={() => {}}
+        />
+      ),
     },
     {
       key: "personalInfo",
-      component: <PersonalInfo />,
+      component: (
+        <PersonalInfo
+          stepProperties={{
+            firstName: "",
+            lastName: "",
+            email: "",
+            phone: "",
+            address: "",
+          }}
+          onUpdate={() => {}}
+        />
+      ),
     },
     {
       key: "signature",
@@ -56,5 +104,7 @@ export default function Page() {
     return <ToastPage />;
   }
 
-  return <Main elements={elements} />;
+  return (
+    <Main elements={elements.map((el) => ({ ...el, stepProperties: {} }))} />
+  );
 }

@@ -8,11 +8,9 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { AnimatePresence, motion } from "framer-motion";
 import { parseAsInteger, useQueryState } from "nuqs";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import useStore from "~/store";
 import { createCustomer } from "./actions";
-import { createPortal } from "react-dom";
-import React from "react";
 
 type ElementConfig<T = Record<string, unknown>> = {
   key: string;
