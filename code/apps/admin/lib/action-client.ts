@@ -4,7 +4,7 @@ import { getUser } from "./clerk-helpers";
 export const actionClient = createSafeActionClient();
 
 // create a authenticated client with clerk
-export const authActionClient = actionClient.use(async ({ next, metadata }) => {
+export const authActionClient = actionClient.use(async ({ next }) => {
   const { clerkUser, user } = await getUser();
 
   return next({ ctx: { user, clerkUser } });

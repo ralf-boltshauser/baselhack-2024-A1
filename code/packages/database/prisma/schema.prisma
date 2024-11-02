@@ -16,7 +16,7 @@ datasource db {
 
 model AttributeMultiplier {
   id         Int           @id @default(autoincrement())
-  attribute  AttributeName
+  attribute  AttributeName @unique
   multiplier Float
   createdAt  DateTime      @default(now())
   updatedAt  DateTime      @updatedAt
@@ -53,15 +53,9 @@ model Customer {
   jobScore                Int?
   addressScore            Int?
   ageScore                Int?
-  employeeIdScore         Int?
   insuranceSumScore       Int?
   durationScore           Int?
-  premiumScore            Int?
-  statusScore             Int?
   genderScore             Int?
-  decisiveFactorScore     Int?
-  trafficLightScore       Int?
-  requestDateScore        Int?
   id                      Int                @id @default(autoincrement())
   name                    String?
   address                 String?
@@ -96,6 +90,10 @@ model Document {
   title      String
 }
 
+model Job {
+  id   Int    @id @default(autoincrement())
+  name String
+  
 model MedicalHistory {
   id         BigInt   @id @default(autoincrement())
   customerId Int      @unique
@@ -152,9 +150,9 @@ enum AttributeName {
   AGE
   BMI
   SMOKING
-  JOB
-  BIRTHDATE
   INSURANCE_SUM
   DURATION
-  GENDER
+  CARDIAC_ISSUES
+  DIABETIC_CONDITION
+  HYPERTENSION
 }
