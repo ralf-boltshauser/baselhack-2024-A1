@@ -1,5 +1,5 @@
 "use server";
-import { DecisiveFactor, prisma, Status, TrafficLightColor } from "@repo/db";
+import { prisma, Status } from "@repo/db";
 import { z } from "zod";
 import { authActionClient } from "~/lib/action-client";
 import { LeadRequiredAction } from "./lead-required-action-enum";
@@ -30,16 +30,16 @@ export const getLeadRequiredAction = authActionClient
       return LeadRequiredAction.DEFAULT;
     }
 
-    if (lead.trafficLightColor === TrafficLightColor.orange) {
-      if (lead.decisiveFactor == DecisiveFactor.score) {
-        return LeadRequiredAction.PROCEED_WITH_CONDITIONS;
-      } else {
-        if (lead.status === Status.review_documents) {
-          // TODO review this
-          return LeadRequiredAction.APPROVE_REQUEST;
-        }
-        return LeadRequiredAction.REQUEST_DOCUMENTS;
-      }
+    if (lead.status === Status.requesting_documents) {
+      return LeadRequiredAction.REQUEST_DOCUMENTS;
+    }
+
+    if (lead.status === Status.waiting_for_counter_offer) {
+      return LeadRequiredAction.PROCEED_WITH_CONDITIONS;
+    }
+
+    if (lead.status === Status.review_documents) {
+      return LeadRequiredAction.APPROVE_REQUEST;
     }
 
     return LeadRequiredAction.DEFAULT;

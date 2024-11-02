@@ -7,28 +7,27 @@ import {
   TabsTrigger,
 } from "@repo/ui/components/ui/tabs";
 import { Download } from "lucide-react";
-import LeadsTable from "./leadsTable";
-import { Status } from "@repo/db";
 import { getMyLeads } from "../actions/get-leads";
+import LeadsTable from "./leadsTable";
 
 const archivedLeadStatuses: Status[] = [
   "accepted",
   "rejected",
+  "waiting_for_documents",
   "accepted_with_conditions",
 ] as const;
 
 const activeLeadStatuses: Status[] = [
   "requesting_documents",
   "waiting_for_counter_offer",
-  "waiting_for_documents",
   "review_documents",
 ] as const;
 
 export default async function LeadsPage() {
   const leads = await getMyLeads();
 
-  if (!leads || leads.data === null || leads.data === undefined) {
-    throw new Error("No leads found");
+  if (!leads || !leads.data || leads.data.length === 0) {
+    return <div>No leads found</div>;
   }
 
   const activeLeads = leads.data.filter((lead) =>

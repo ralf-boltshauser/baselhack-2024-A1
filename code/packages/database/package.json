@@ -7,12 +7,17 @@
     "db:studio": "prisma studio",
     "db:reset": "prisma db push --force-reset && prisma db push"
   },
+  "prisma": {
+    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
+  },
   "dependencies": {
     "@prisma/client": "latest"
   },
   "devDependencies": {
-    "@types/node": "^20",
-    "prisma": "latest"
+    "@types/node": "^20.17.5",
+    "prisma": "latest",
+    "ts-node": "^10.9.2",
+    "typescript": "^5"
   },
   "exports": {
     ".": "./src/index.ts"

@@ -16,7 +16,7 @@ datasource db {
 
 model AttributeMultiplier {
   id         Int           @id @default(autoincrement())
-  attribute  AttributeName
+  attribute  AttributeName @unique
   multiplier Float
   createdAt  DateTime      @default(now())
   updatedAt  DateTime      @updatedAt
@@ -53,15 +53,9 @@ model Customer {
   jobScore                Int?
   addressScore            Int?
   ageScore                Int?
-  employeeIdScore         Int?
   insuranceSumScore       Int?
   durationScore           Int?
-  premiumScore            Int?
-  statusScore             Int?
   genderScore             Int?
-  decisiveFactorScore     Int?
-  trafficLightScore       Int?
-  requestDateScore        Int?
   id                      Int                @id @default(autoincrement())
   name                    String?
   address                 String?
@@ -94,6 +88,11 @@ model Document {
   fileUrl    String?
   uploadDate DateTime @default(now())
   title      String
+}
+
+model Job {
+  id   Int    @id @default(autoincrement())
+  name String
 }
 
 model MedicalHistory {
@@ -142,9 +141,10 @@ enum TrafficLightColor {
 }
 
 model RiskThreshold {
-  id        Int   @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   greenMax  Float // Max score for Green category
   orangeMax Float // Max score for Orange category
+  createdAt DateTime @default(now())
   // Anything above orangeMax will automatically be categorized as Red
 }
 
@@ -152,9 +152,9 @@ enum AttributeName {
   AGE
   BMI
   SMOKING
-  JOB
-  BIRTHDATE
   INSURANCE_SUM
   DURATION
-  GENDER
+  CARDIAC_ISSUES
+  DIABETIC_CONDITION
+  HYPERTENSION
 }
