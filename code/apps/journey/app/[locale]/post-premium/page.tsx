@@ -1,17 +1,20 @@
 "use client";
 
+import { useState } from "react";
 import Main from "~/components/main";
-import PremiumPost from "~/components/post-premium/steps/premium-post";
+import { finalSubmission } from "~/components/post-premium/actions";
 import BmiPicker from "~/components/post-premium/steps/bmi-picker";
 import HealthQuestions from "~/components/post-premium/steps/health-questions";
-import PickBeneficiary from "~/components/post-premium/steps/pick-beneficiary";
 import PersonalInfo from "~/components/post-premium/steps/personal-info";
+import PickBeneficiary from "~/components/post-premium/steps/pick-beneficiary";
+import PremiumPost from "~/components/post-premium/steps/premium-post";
 import { SignatureStep } from "~/components/post-premium/steps/signature";
 import { ToastPage } from "~/components/post-premium/steps/toast";
-import { useState } from "react";
+import useStore from "~/store";
 
 export default function Page() {
   const [showToast, setShowToast] = useState(false);
+  const customerId = useStore((state) => state.customerId);
 
   const elements = [
     {
@@ -36,7 +39,16 @@ export default function Page() {
     },
     {
       key: "signature",
-      component: <SignatureStep onAccept={() => setShowToast(true)} />,
+      component: (
+        <SignatureStep
+          onAccept={() => {
+            setShowToast(true);
+            if (customerId) {
+              finalSubmission(customerId);
+            }
+          }}
+        />
+      ),
     },
   ];
 

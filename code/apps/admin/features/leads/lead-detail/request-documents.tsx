@@ -39,8 +39,8 @@ export default function RequestDocuments({ lead }: { lead: Customer }) {
             Some manual operations are required to complete this process, below
             you can see my recommendation:
           </p>
-          <div className="flex flex-row gap-12 justify-start items-stretch">
-            <div className="flex flex-col gap-2 justify-start items-start bg-white border p-4 rounded-lg">
+          <div className="flex flex-row gap-12 justify-start items-stretch w-full">
+            <div className="flex flex-col gap-2 justify-start items-start bg-white border p-4 rounded-lg w-full">
               <h3 className="text-lg font-bold">Required Documents</h3>
               <div className="flex flex-col gap-2">
                 {recommendedDocuments.map((doc) => (
@@ -51,7 +51,7 @@ export default function RequestDocuments({ lead }: { lead: Customer }) {
               </div>
             </div>
 
-            <div className="flex flex-col gap-2 justify-start items-start flex-grow">
+            <div className="flex flex-col gap-2 justify-start items-start flex-grow w-full">
               <div className="w-full bg-white border rounded-lg p-2">
                 <div className="flex flex-wrap gap-2 mb-2">
                   {documents.map((doc) => (
