@@ -1,9 +1,10 @@
+import { Status } from "@repo/db";
 import { Button } from "@repo/ui/components/ui/button";
 import {
   Tabs,
+  TabsContent,
   TabsList,
   TabsTrigger,
-  TabsContent,
 } from "@repo/ui/components/ui/tabs";
 import { Download } from "lucide-react";
 import LeadsTable from "./leadsTable";

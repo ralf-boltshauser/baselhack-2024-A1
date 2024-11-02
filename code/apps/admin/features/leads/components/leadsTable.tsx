@@ -1,6 +1,19 @@
 "use client";
 
-import { useState } from "react";
+import { Customer, Status } from "@repo/db";
+import { Badge } from "@repo/ui/components/ui/badge";
+import { Button } from "@repo/ui/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+} from "@repo/ui/components/ui/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@repo/ui/components/ui/dropdown-menu";
 import { Input } from "@repo/ui/components/ui/input";
 import {
   Table,
@@ -10,18 +23,11 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/components/ui/table";
-import { Badge } from "@repo/ui/components/ui/badge";
-import { Search, ChevronUp, ChevronDown, Filter } from "lucide-react";
-import { Button } from "@repo/ui/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@repo/ui/components/ui/dropdown-menu";
-import { formatCurrency, formatDate, formatYear } from "~/lib/format-helpers";
-import { Customer, Status } from "@repo/db";
+import { ChevronDown, ChevronUp, Filter, Search } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { formatCurrency, formatDate, formatYear } from "~/lib/format-helpers";
+import LeadDetail from "../lead-detail/lead-detail";
 
 const renderStatusBadge = (status: Status) => {
   switch (status) {
@@ -47,6 +53,8 @@ const renderStatusBadge = (status: Status) => {
 };
 
 export default function LeadsTable({ leads }: { leads: Customer[] }) {
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [activeLead, setActiveLead] = useState<Customer | null>(null);
   const router = useRouter();
 
   // states
@@ -233,7 +241,8 @@ export default function LeadsTable({ leads }: { leads: Customer[] }) {
               key={lead.id}
               className="cursor-pointer"
               onClick={() => {
-                router.push(`/${lead.id}`);
+                setActiveLead(lead);
+                setIsDialogOpen(true);
               }}
             >
               <TableCell>{lead.id?.toString()}</TableCell>
@@ -254,6 +263,12 @@ export default function LeadsTable({ leads }: { leads: Customer[] }) {
           ))}
         </TableBody>
       </Table>
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent className="bg-gray-100 w-screen max-w-[800px] p-16">
+          <DialogHeader></DialogHeader>
+          {activeLead && <LeadDetail lead={activeLead} />}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
