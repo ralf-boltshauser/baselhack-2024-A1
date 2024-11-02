@@ -39,7 +39,7 @@ export default async function LeadsPage() {
   const draftLeads = leads.data.filter((lead) => lead.status === "draft");
 
   return (
-    <div className="w-full ">
+    <div className="w-full">
       <div className="flex justify-between items-center bg-background mb-8">
         <h1 className="text-3xl">Leads</h1>
         <Button variant="outline">
