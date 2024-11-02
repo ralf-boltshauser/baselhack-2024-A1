@@ -11,19 +11,27 @@ import { parseAsInteger, useQueryState } from "nuqs";
 import { useEffect, useRef, useState } from "react";
 import useStore from "~/store";
 import { createCustomer } from "./actions";
-import GenderPicker from "./steps/gender-picker";
-import Intro from "./steps/testing-comp";
 
-export default function Main() {
+export default function Main({
+  elements,
+}: {
+  elements: Array<{ key: string; component: React.ReactNode }>;
+}) {
   const [step, setStep] = useQueryState("step", parseAsInteger.withDefault(0));
 
   const { data, refetch } = useQuery({
     queryKey: ["customer"],
-    queryFn: () => createCustomer(),
+    // queryFn: () => createCustomer(),
+    queryFn: async () => {
+      console.log("queryFn");
+      const res = await createCustomer();
+      console.log("res", res);
+      return res;
+    },
     enabled: false, // This prevents the query from running automatically on mount
   });
 
-  const divRef = useRef(null);
+  const divRef = useRef<HTMLDivElement | null>(null);
   const [height, setHeight] = useState(0);
 
   function adjustHeight() {
@@ -41,16 +49,20 @@ export default function Main() {
   const setLoaded = useStore((state) => state.setLoaded);
   useEffect(() => {
     if (!customerId && loaded) {
+      console.log("Triggering customer creation", { customerId, loaded });
       refetch();
+      console.log("refetched");
     }
   }, [customerId, loaded]);
 
   useEffect(() => {
+    console.log("Setting loaded to true");
     setLoaded(true);
   }, []);
 
   useEffect(() => {
     if (data) {
+      console.log("Customer created:", data);
       setCustomerId(Number(data.id));
     }
   }, [data]);
@@ -62,26 +74,14 @@ export default function Main() {
       }, 3000);
     }
   }, [step]);
-
-  const handleRefAssignement = (el: HTMLDivElement) => {
+  const handleRefAssignement = (el: HTMLDivElement | null) => {
     divRef.current = el;
     adjustHeight();
   };
 
   if (!customerId) {
-    return null;
+    return <div>Loading...</div>;
   }
-
-  const elements = [
-    {
-      key: "intro",
-      component: <Intro />,
-    },
-    {
-      key: "genderPicker",
-      component: <GenderPicker />,
-    },
-  ];
 
   return (
     <div className="flex mt-64">
@@ -103,17 +103,16 @@ export default function Main() {
               <motion.div
                 key={e.key}
                 layoutId={e.key}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
+                initial={{ opacity: 1 }}
+                animate={{
+                  opacity: 0.5,
+                  transition: { delay: 0.3, duration: 0.5 },
+                }}
                 exit={{ opacity: 0 }}
               >
                 {e.component}
               </motion.div>
             ))}
-            <motion.div
-              className="w-full h-full absolute inset-0 bg-white/50"
-              style={{ bottom: "auto", zIndex: 10 }}
-            />
           </motion.div>
           <div className="flex flex-col gap-4">
             <AnimatePresence mode="wait">
