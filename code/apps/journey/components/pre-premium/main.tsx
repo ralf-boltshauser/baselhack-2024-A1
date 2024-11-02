@@ -23,7 +23,7 @@ export default function Main() {
     enabled: false, // This prevents the query from running automatically on mount
   });
 
-  const divRef = useRef(null);
+  const divRef = useRef<HTMLDivElement | null>(null);
   const [height, setHeight] = useState(0);
 
   function adjustHeight() {
