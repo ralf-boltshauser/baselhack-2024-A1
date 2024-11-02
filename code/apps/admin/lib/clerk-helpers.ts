@@ -6,6 +6,8 @@ export const getUser: () => Promise<{
 }> = async () => {
   const clerkUser = await currentUser();
 
+  console.log("clerkUser", clerkUser);
+
   if (!clerkUser) {
     throw new Error("Unauthorized");
   }
@@ -15,6 +17,8 @@ export const getUser: () => Promise<{
       clerkId: clerkUser.id,
     },
   });
+
+  console.log("user", user);
 
   if (!user) {
     throw new Error("User not found");

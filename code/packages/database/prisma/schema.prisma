@@ -141,9 +141,10 @@ enum TrafficLightColor {
 }
 
 model RiskThreshold {
-  id        Int   @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   greenMax  Float // Max score for Green category
   orangeMax Float // Max score for Orange category
+  createdAt DateTime @default(now())
   // Anything above orangeMax will automatically be categorized as Red
 }
 
