@@ -1,4 +1,5 @@
 import { Button } from "@repo/ui/components/ui/button";
+import Image from "next/image";
 import Link from "next/link";
 
 export default async function Page() {
@@ -15,6 +16,13 @@ export default async function Page() {
           Get Your Price Now
         </Button>
       </Link>
+      <Image
+        src="/icons/congratulations.svg"
+        alt="Celebration illustration"
+        width={120}
+        height={120}
+        className="mt-10"
+      />
     </section>
   );
 }
