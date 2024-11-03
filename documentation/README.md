@@ -204,10 +204,10 @@ This project is built using a modern, scalable, and type-safe architecture. The 
 ---
 
 ## Challenges and Future Improvements
-
-Auth action client (automaticall injecting)
-Type safe query parameter
-Creating a customer storing it into the session
+- We made authentication and user amanagement for the backoffice with clerk. This is because we have senesitive information. So we need this protection layer. This needed an action auth and a QueryClientProvier for react. This was hard to inject and needed a lot of word.
+- For our chat and location feature, we used query parameter in the url. To make this less error prone, we used type safe query parameters in react. This was complicated, but refreshing to implement.
+- We have a lot of data stored into the local storage, so the user can alwyas scroll back, scroll forward etc. The userID especially is saved in the session.
+- The chat feature was hard to implement beacuse we neede the animation, preserving states for components when sliding up. This needed to feel natural.
 
 ---
 
