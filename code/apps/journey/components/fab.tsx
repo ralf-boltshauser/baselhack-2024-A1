@@ -1,13 +1,13 @@
 "use client";
 
-import { useState } from "react";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@repo/ui/components/ui/popover";
-import { CircleHelp, MessageSquareText, Phone, Plus, Save } from "lucide-react";
 import { motion } from "framer-motion";
+import { CircleHelp, MessageSquareText, Phone, Plus, Save } from "lucide-react";
+import { useState } from "react";
 
 function FABItem({ icon, label }: { icon: React.ReactNode; label: string }) {
   return (
@@ -34,7 +34,7 @@ export default function FAB() {
           </motion.button>
         </div>
       </PopoverTrigger>
-      <PopoverContent className="bg-[#3B3A53] text-white flex flex-col gap-4 w-fit">
+      <PopoverContent className="bg-[#3B3A53] text-white flex flex-col gap-4 w-fit mr-5">
         <FABItem label="Save Progress" icon={<Save />} />
         <FABItem label="FAQ" icon={<CircleHelp />} />
         <FABItem label="Chat with Mia" icon={<MessageSquareText />} />
