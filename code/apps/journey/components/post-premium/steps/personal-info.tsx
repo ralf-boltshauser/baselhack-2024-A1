@@ -72,22 +72,24 @@ export default function PersonalInfo({
         isSelected={isSelected}
       >
         <div className="flex flex-col gap-6">
-          <div className="space-y-2">
-            <p className="text-sm opacity-75">First Name</p>
-            <Input
-              placeholder="Enter your first name"
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
-            />
-          </div>
+          <div className="grid grid-cols-2 gap-6">
+            <div className="space-y-2">
+              <p className="text-sm opacity-75">First Name</p>
+              <Input
+                placeholder="Enter your first name"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+              />
+            </div>
 
-          <div className="space-y-2">
-            <p className="text-sm opacity-75">Last Name</p>
-            <Input
-              placeholder="Enter your last name"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
-            />
+            <div className="space-y-2">
+              <p className="text-sm opacity-75">Last Name</p>
+              <Input
+                placeholder="Enter your last name"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+              />
+            </div>
           </div>
 
           <div className="space-y-2">
