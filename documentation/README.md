@@ -14,6 +14,9 @@
     - [Back-Office](#back-office)
   - [Key Features](#key-features)
   - [Screenshots/Demo](#screenshotsdemo)
+    - [Demo](#demo)
+    - [Main Application Screenshots](#main-application-screenshots)
+    - [Back Office Screenshots](#back-office-screenshots)
   - [Tech Stack and Dependencies](#tech-stack-and-dependencies)
   - [Setup and Installation Instructions](#setup-and-installation-instructions)
   - [Architecture and Technical Overview](#architecture-and-technical-overview)
@@ -69,6 +72,39 @@ Red candidates are automatically reconsidered if they become eligible at a later
 ---
 
 ## Screenshots/Demo
+### Demo
+
+![Demo Animation](screenshots/animation.gif)
+*Full application flow demonstration*
+
+### Main Application Screenshots
+
+![Landing Page](screenshots/screenshot1.png)
+*Landing page with initial form questions*
+
+![Chat Interface](screenshots/screenshot2.png) 
+*Natural chat-like interface for data collection*
+
+![Quote Generation](screenshots/screenshot3.png)
+*Instant quote generation based on user inputs*
+
+![Quote Generation](screenshots/screenshot4.png)
+*More Data screen for checking of validity*
+
+![Quote Generation](screenshots/screenshot5.png)
+*Singature on website*
+
+### Back Office Screenshots
+
+![Dashboard](screenshots/screenshot7.jpeg)
+*Employee dashboard showing application status overview*
+
+![Risk Assessment](screenshots/screenshot8.jpeg)
+*Leads*
+
+![Risk Assessment](screenshots/screenshot9.jpeg)
+*Risk assesement*
+
 
 ---
 
