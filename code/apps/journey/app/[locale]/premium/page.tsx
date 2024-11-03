@@ -136,7 +136,7 @@ export default function Component() {
           <AvatarFallback>Mia</AvatarFallback>
         </Avatar>
         <p className="text-sm">
-          Your offer's ready! Tap 'Get Covered in 5 Minutes' to finish up.
+          Your offer is ready! Tap <strong>Get Covered in 5 Minutes</strong> to finish up.
         </p>
       </motion.div>
 
@@ -201,7 +201,7 @@ export default function Component() {
                 </div>
               </div>
               <div className="flex items-center justify-between">
-                <span className="font-medium">Term:</span>
+                <span className="font-medium">Duration:</span>
                 <div className="flex items-center gap-2">
                   <span>{customer?.duration} years</span>
                   <Button
@@ -232,7 +232,7 @@ export default function Component() {
         transition={{ delay: 0.55, duration: 0.5, ease: "easeOut" }}
         className="!mt-2"
       >
-        We did the research for you! Here's a quick and easy comparison of our
+        We did the research for you! Here is a quick and easy comparison of our
         rates with some of our top competitors:
       </motion.p>
       <motion.div

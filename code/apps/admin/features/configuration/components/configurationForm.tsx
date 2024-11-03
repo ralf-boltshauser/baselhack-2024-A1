@@ -47,7 +47,7 @@ const questions = [
   },
   {
     attribute: AttributeName.BMI,
-    question: "What's your BMI ?",
+    question: "What is your BMI ?",
   },
   {
     attribute: AttributeName.DURATION,
