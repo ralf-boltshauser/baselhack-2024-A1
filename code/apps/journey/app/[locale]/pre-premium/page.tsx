@@ -46,5 +46,14 @@ export default function Page() {
     },
   ];
 
-  return <Main elements={elements} />;
+  return (
+    <Main
+      elements={elements.map((el) => ({
+        ...el,
+        stepProperties: {
+          question: "",
+        },
+      }))}
+    />
+  );
 }
