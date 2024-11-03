@@ -186,6 +186,10 @@ export async function finalSubmission(customerId: number) {
   const trafficLight = await calculateTrafficLight(score);
   const status = await getStatus(trafficLight, customerId);
 
+  console.log("SCORE", score);
+  console.log("TRAFFIC LIGHT", trafficLight);
+  console.log("STATUS", status);
+
   await prisma.customer.update({
     where: { id: customerId },
     data: {
