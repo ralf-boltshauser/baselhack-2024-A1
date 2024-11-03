@@ -37,7 +37,7 @@ export default function Intro() {
       <div className="flex flex-col gap-4">
         <p>
           your insurance expert from{" "}
-          <span className="text-primary">{city ?? "Zurich"}</span>
+          <span className="text-primary">{city ?? "Basel"}</span>
         </p>
         <p>
           I'll guide you through a four quick questions to get your price. no
