@@ -24,7 +24,7 @@ export default function Intro() {
 
   return (
     <div>
-      <h2 className="text-2xl w-fit relative font-bold flex flex-row gap-2 items-baseline">
+      <h2 className="text-2xl text-black w-fit relative font-bold flex flex-row gap-2 items-baseline">
         Hello I'm Mia
         <Image
           src={"/icons/waving-hand.png"}

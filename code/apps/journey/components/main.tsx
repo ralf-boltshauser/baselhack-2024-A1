@@ -12,7 +12,7 @@ import React, { useEffect, useRef, useState } from "react";
 import useStore from "~/store";
 import { createCustomer } from "./actions";
 
-type ElementConfig<T = Record<string, unknown>> = {
+type ElementConfig<T = { question: string }> = {
   key: string;
   component: React.ReactElement;
   stepProperties: T;
@@ -149,22 +149,11 @@ export default function Main({ elements: initialElements }: MainProps) {
   }
 
   return (
-    <div className="flex mt-64">
-      <Avatar className="w-12 h-12" onClick={() => setStep(step + 1)}>
-        <AvatarImage src="/icons/mia.png" alt="Mia" />
-        <AvatarFallback>Mia</AvatarFallback>
-      </Avatar>
-      <div className="pt-4">
+    <div className="flex flex-col items-center mt-16 px-4">
+      <div className="w-full max-w-md">
         <motion.div
           style={{ position: "relative", top: `-${height}px` }}
-          className="flex flex-col gap-12 -mt-8 ml-5"
-          animate={{
-            y: isScrollingUp ? [0, -20, 0] : 0,
-          }}
-          transition={{
-            duration: 0.5,
-            ease: "easeInOut",
-          }}
+          className="flex flex-col gap-12"
         >
           <motion.div
             layoutId="container"
@@ -190,12 +179,29 @@ export default function Main({ elements: initialElements }: MainProps) {
             <AnimatePresence mode="wait">
               {elements.slice(step, step + 1).map((e) => (
                 <motion.div key={e.key} layoutId={e.key}>
-                  {React.cloneElement(e.component, {
-                    isSelected: true,
-                    stepProperties: e.stepProperties,
-                    onUpdate: (newProperties: any) =>
-                      updateStepProperties(e.key, newProperties),
-                  })}
+                  <div className="flex flex-col gap-4 w-full">
+                    <div className="flex flex-col gap-4">
+                      <div className="flex items-center gap-3">
+                        <Avatar 
+                          className="w-12 h-12 flex-shrink-0" 
+                        >
+                          <AvatarImage src="/icons/mia.png" alt="Mia" />
+                          <AvatarFallback>Mia</AvatarFallback>
+                        </Avatar>
+                        <div className="flex flex-col">
+                          <span className="text-lg font-medium">Mia</span>
+                          <span className="text-sm text-gray-500">Consultant</span>
+                        </div>
+                      </div>
+                      <h2 className="text-black font-medium">{e.stepProperties.question}</h2>
+                    </div>
+                    {React.cloneElement(e.component, {
+                      isSelected: true,
+                      stepProperties: e.stepProperties,
+                      onUpdate: (newProperties: any) =>
+                        updateStepProperties(e.key, newProperties),
+                    })}
+                  </div>
                 </motion.div>
               ))}
             </AnimatePresence>

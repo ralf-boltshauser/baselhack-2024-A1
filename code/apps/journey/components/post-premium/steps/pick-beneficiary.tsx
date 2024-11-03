@@ -70,7 +70,7 @@ export default function PickBeneficiary({
         text="Choose a beneficiary: 'Standard' or 'Custom'"
         isSelected={isSelected}
       >
-        <div className="flex gap-4 mt-4 pl-8">
+        <div className="flex gap-4 mt-2">
           <Button
             onClick={() => handleClick("Standard")}
             variant={beneficiary === "Standard" ? "default" : "outline"}
