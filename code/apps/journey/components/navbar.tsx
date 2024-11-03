@@ -38,20 +38,6 @@ export default function Navbar() {
   }, [searchParams]);
 
   return (
-<<<<<<< Updated upstream
-    <nav className="relative flex items-center justify-between px-4 md:px-12 pb-4 pt-8 bg-white shadow-md z-50">
-      <div className="flex items-center justify-between md:justify-around w-full">
-        <div className="flex items-end">
-          <Image
-            src={"/logo/pax-logo.svg"}
-            alt="Company Logo"
-            width={72}
-            height={72}
-            className="text-blue-600"
-          />
-        </div>
-        <div className="ml-auto md:ml-0">
-=======
     <nav className="relative flex items-center justify-between px-12 pb-4 pt-8 bg-white shadow-md z-50">
       <div className="flex items-center justify-around space-x-12 w-full">
         <Link href="/">
@@ -66,7 +52,6 @@ export default function Navbar() {
           </div>
         </Link>
         <div>
->>>>>>> Stashed changes
           <Select>
             <SelectTrigger className="w-[70px]">
               <SelectValue placeholder="EN" />
