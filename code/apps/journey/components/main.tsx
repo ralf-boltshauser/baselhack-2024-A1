@@ -184,7 +184,6 @@ export default function Main({ elements: initialElements }: MainProps) {
                       <div className="flex items-center gap-3">
                         <Avatar 
                           className="w-12 h-12 flex-shrink-0" 
-                          onClick={() => setStep(step + 1)}
                         >
                           <AvatarImage src="/icons/mia.png" alt="Mia" />
                           <AvatarFallback>Mia</AvatarFallback>
