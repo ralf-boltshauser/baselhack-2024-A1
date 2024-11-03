@@ -37,8 +37,8 @@ export default function Navbar() {
   }, [searchParams]);
 
   return (
-    <nav className="relative flex items-center justify-between px-12 pb-4 pt-8 bg-white shadow-md z-50">
-      <div className="flex items-center justify-around space-x-12 w-full">
+    <nav className="relative flex items-center justify-between px-4 md:px-12 pb-4 pt-8 bg-white shadow-md z-50">
+      <div className="flex items-center justify-between md:justify-around w-full">
         <div className="flex items-end">
           <Image
             src={"/logo/pax-logo.svg"}
@@ -48,9 +48,9 @@ export default function Navbar() {
             className="text-blue-600"
           />
         </div>
-        <div>
+        <div className="ml-auto md:ml-0">
           <Select>
-            <SelectTrigger>
+            <SelectTrigger className="w-[70px]">
               <SelectValue placeholder="EN" />
             </SelectTrigger>
             <SelectContent>
