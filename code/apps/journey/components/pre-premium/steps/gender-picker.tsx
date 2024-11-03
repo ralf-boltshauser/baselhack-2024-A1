@@ -8,6 +8,7 @@ import { updateGender } from "../actions";
 import Image from "next/image";
 import { useState } from "react";
 import { TypeWriter } from "~/components/type-writer";
+import { cn } from "@repo/ui/lib/utils";
 
 type GenderType = "male" | "female" | null;
 
@@ -51,7 +52,10 @@ export default function GenderPicker({
           <Button
             onClick={() => handleGenderSelect(Gender.male)}
             variant={selectedGender === "male" ? "default" : "ghost"}
-            className="flex flex-col items-center w-24 h-24 p-4 rounded-lg"
+            className={cn(
+              "flex flex-col items-center w-24 h-24 p-4 rounded-lg",
+              "shadow-[0_2px_8px_rgba(0,0,0,0.08)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.12)] transition-shadow duration-200",
+            )}
           >
             <Image
               src="/icons/male.svg"
@@ -64,7 +68,10 @@ export default function GenderPicker({
           <Button
             onClick={() => handleGenderSelect(Gender.female)}
             variant={selectedGender === "female" ? "default" : "ghost"}
-            className="flex flex-col items-center w-24 h-24 p-4 rounded-lg"
+            className={cn(
+              "flex flex-col items-center w-24 h-24 p-4 rounded-lg",
+              "shadow-[0_2px_8px_rgba(0,0,0,0.08)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.12)] transition-shadow duration-200",
+            )}
           >
             <Image
               src="/icons/female.svg"

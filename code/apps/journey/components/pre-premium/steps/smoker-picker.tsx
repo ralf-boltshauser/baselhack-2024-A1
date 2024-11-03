@@ -78,7 +78,7 @@ export default function SmokerPicker({
           </Button>
         </div>
         <span className="text-gray-500 underline text-sm cursor-pointer pt-2 block">
-          Who is classifed as smoker ?
+          Who is classified as smoker ?
         </span>
       </div>
     </TypeWriter>
