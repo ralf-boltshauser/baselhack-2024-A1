@@ -28,6 +28,7 @@ type BirthdayProperties = {
 
 interface BirthdayPickerProps {
   stepProperties?: BirthdayProperties;
+  // eslint-disable-next-line no-unused-vars
   onUpdate?: (properties: Partial<BirthdayProperties>) => void;
   isSelected?: boolean;
 }
@@ -65,7 +66,7 @@ export default function BirthdayPicker({
 
   return (
     <div className="space-y-6 w-full max-w-md">
-      <TypeWriter text="When's your birthday?" isSelected={isSelected}>
+      <TypeWriter text="When is your birthday?" isSelected={isSelected}>
         <div>
           <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
