@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Combobox } from "@headlessui/react";
 import { debounce } from "lodash";
 
 interface Props {
   onSelect: (address: string) => void;
+  defaultSelected?: string;
 }
 
 interface SearchResult {
@@ -11,8 +12,8 @@ interface SearchResult {
   place_id: number;
 }
 
-export default function AddressSearch({ onSelect }: Props) {
-  const [query, setQuery] = useState("");
+export default function AddressSearch({ onSelect, defaultSelected }: Props) {
+  const [query, setQuery] = useState(defaultSelected || "");
   const [addresses, setAddresses] = useState<SearchResult[]>([]);
 
   const MOCK_ADDRESSES: SearchResult[] = [
@@ -73,6 +74,12 @@ export default function AddressSearch({ onSelect }: Props) {
     );
     setAddresses(filteredAddresses);
   }, 300);
+
+  useEffect(() => {
+    if (defaultSelected) {
+      searchAddresses(defaultSelected);
+    }
+  }, [defaultSelected]);
 
   return (
     <Combobox

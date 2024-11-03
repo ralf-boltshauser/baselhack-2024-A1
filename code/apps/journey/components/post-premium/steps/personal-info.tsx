@@ -112,7 +112,7 @@ export default function PersonalInfo({
 
           <div className="space-y-2">
             <p className="text-sm opacity-75">Address</p>
-            <AddressSearch onSelect={setAddress} />
+            <AddressSearch onSelect={setAddress} defaultSelected={address} />
           </div>
         </div>
 
