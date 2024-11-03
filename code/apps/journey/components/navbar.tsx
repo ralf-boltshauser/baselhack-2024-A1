@@ -39,7 +39,7 @@ export default function Navbar() {
 
   return (
     <nav className="relative flex items-center justify-between px-12 pb-4 pt-8 bg-white shadow-md z-50">
-      <div className="flex items-center justify-around space-x-12 w-full">
+      <div className="flex items-center justify-between space-x-12 w-full">
         <Link href="/">
           <div className="flex items-end">
             <Image
