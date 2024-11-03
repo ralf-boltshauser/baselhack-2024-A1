@@ -60,6 +60,9 @@ There are certain cases that need to be considered during the back-office review
 Data is saved because the situation can change over time, such as every month, allowing the weights of our algorithm to be adjusted with a visual graph that shows these weights. 
 Red candidates are automatically reconsidered if they become eligible at a later point.
 
+![Our Process](screenshots/process.jpeg)
+*Our Process for arriving at the final product*
+
 ---
 
 ## Key Features
