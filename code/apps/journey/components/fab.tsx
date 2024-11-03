@@ -1,11 +1,13 @@
 "use client";
 
+import { useState } from "react";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@repo/ui/components/ui/popover";
 import { CircleHelp, MessageSquareText, Phone, Plus, Save } from "lucide-react";
+import { motion } from "framer-motion";
 
 function FABItem({ icon, label }: { icon: React.ReactNode; label: string }) {
   return (
@@ -17,13 +19,19 @@ function FABItem({ icon, label }: { icon: React.ReactNode; label: string }) {
 }
 
 export default function FAB() {
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
-    <Popover>
+    <Popover onOpenChange={(open) => setIsOpen(open)}>
       <PopoverTrigger asChild>
         <div className="fixed bottom-5 right-5">
-          <button className=" w-14 h-14 bg-[#3B3A53] rounded-full shadow-lg text-white text-3xl flex items-center justify-center">
+          <motion.button
+            className="w-14 h-14 bg-[#3B3A53] rounded-full shadow-lg text-white text-3xl flex items-center justify-center"
+            animate={{ rotate: isOpen ? 45 : 0 }}
+            transition={{ duration: 0.3 }}
+          >
             <Plus />
-          </button>
+          </motion.button>
         </div>
       </PopoverTrigger>
       <PopoverContent className="bg-[#3B3A53] text-white flex flex-col gap-4 w-fit">

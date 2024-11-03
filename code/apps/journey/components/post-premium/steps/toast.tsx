@@ -11,12 +11,12 @@ const documents = [
   },
   {
     title: "Certificate of Insurance",
-    icon: "📜",
+    icon: "📄",
     downloadUrl: "/docs/certificate.pdf",
   },
   {
     title: "Welcome Package",
-    icon: "📋",
+    icon: "📄",
     downloadUrl: "/docs/welcome-package.pdf",
   },
 ];
